@@ -1,7 +1,10 @@
-﻿@model IEnumerable<Exam_Web_Core.CauHoi>
+﻿@model PagedList.IPagedList<Exam_Web_MVC.Models.CauHoiEntity>
+@using PagedList.Mvc;
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Danh sách câu hỏi";
     Layout = "~/Areas/Teacher/Views/Shared/_TeacherLayout.cshtml";
+    int stt = ViewBag.stt;
 }
 
 <div class="card">
@@ -10,157 +13,74 @@
             <div class="row">
                 <div class="col-md-6">
                     <h2>Danh sách câu hỏi</h2>
-                    <a class="btn btn-primary rounded-pill" href="@Url.Action("Create","CauHoiManagement")">Thêm Câu Hỏi</a>
-                    @*@Html.ActionLink("Thêm câu hỏi", "Create", null, new { @class = "btn btn-primary" })*@
                 </div>
-                <form method="post" class="col-md-6">
-                    <div>
-                        <div class="input-group mt-4">
-                            <input type="search" class="form-control rounded" placeholder="Tìm kiếm" name="searchString" />
-                            <button type="submit" class="btn btn-outline-primary"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
-
+    </div>
+    <div class="box-action">
+        @using (Html.BeginForm("Index", "DeThiManagement", FormMethod.Get, new { @class = "form-inline margin-bottom", @role = "form" }))
+        {
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+            @Html.TextBox("keysearch", null, new { @class = "form-control", @placeholder = "Tìm tên..." })
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        }
     </div>
     <div class="card-body">
         <table class="table table-bordered table-striped">
             <tr>
+                <th>STT</th>
                 <th>
-                    Nội dung câu hỏi
+                    Câu hỏi
                 </th>
-                <th>
-                    Đáp án A
+                <th style="width: 40%">
+                    Đáp án
                 </th>
-                <th>
-                    Đáp án B
+                <th style="width: 80px;">
+                    Đáp án
                 </th>
-                <th>
-                    Đáp án C
-                </th>
-                <th>
-                    Đáp án D
-                </th>
-                <th>
-                    Câu trả lời dúng
-                </th>
-                <th>
+                <th style="width: 120px;">
                     Độ khó
                 </th>
-                <th>
-                    Tên môn học
+                <th style="width: 100px;">
+                    Môn học
                 </th>
-                <th>
-                    Hành động
-                </th>
+                <th style="width: 100px;"></th>
             </tr>
 
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>@stt</td>
                     <td>
                         @Html.DisplayFor(modelItem => item.NoiDungCauHoi)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Answer_A)
+                        <div><b>Đáp án A: </b>@Html.DisplayFor(modelItem => item.Answer_A)</div>
+                        <div><b>Đáp án B: </b>@Html.DisplayFor(modelItem => item.Answer_B)</div>
+                        <div><b>Đáp án C: </b>@Html.DisplayFor(modelItem => item.Answer_C)</div>
+                        <div><b>Đáp án D: </b>@Html.DisplayFor(modelItem => item.Answer_D)</div>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Answer_B)
+                        <b>@Html.DisplayFor(modelItem => item.CauTraLoiDung)</b>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Answer_C)
+                        @Html.DisplayFor(modelItem => item.DoKho)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Answer_D)
+                        @Html.DisplayFor(modelItem => item.MonHoc)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CauTraLoiDung)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DoKho.TenDoKho)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MonHoc.TenMH)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Edit","CauHoiManagement",new { id=item.CauHoiID})"><i class="far fa-edit" style="font-size:22px;"></i></a>
-                        <a href="@Url.Action("Delete","CauHoiManagement",new { id=item.CauHoiID})" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')"><i class="far fa-trash-alt" style="font-size:22px;"></i></a>
-
-                        @*@Html.ActionLink("Sửa", "Edit", new { id = item.CauHoiID }, new { @class = "btn btn-primary" })
-                        @Html.ActionLink("Xóa", "Delete", new { id = item.CauHoiID }, new { @class = "btn btn-danger", onclick = "return confirm('Bạn có chắc chắn muốn xóa không?')" })*@
+                        <div class="text-center">
+                            @Html.ActionLink("Sửa", "Edit", new { id = item.CauHoiID })
+                            <span>|</span>
+                            @Html.ActionLink("Xóa", "Delete", new { id = item.CauHoiID })
+                        </div>
                     </td>
                 </tr>
+                stt++;
             }
-
         </table>
-
-        @*paging*@
-        @{
-            int totalPages = (int)ViewBag.TotalPages;
-            int pageIndex = (int)ViewBag.PageIndex;
-            int offset = 2, start = 1, end = 6;
-        }
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                @{
-                    if (pageIndex != 1)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index","CauHoiManagement",new { id=1})"><<</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index","CauHoiManagement",new { id=pageIndex-1})"><</a>
-                        </li>
-                    }
-                }
-                @{
-
-                    if (pageIndex <= offset)
-                    {
-                        start = 1;
-                    }
-                    else
-                    {
-                        start = pageIndex - offset;
-                    }
-
-                    if (totalPages - pageIndex < offset)
-                    {
-                        end = totalPages;
-                    }
-                    else
-                    {
-                        end = pageIndex + offset;
-                    }
-
-                    for (int i = start; i <= end; i++)
-                    {
-                        if (i == pageIndex)
-                        {
-                            <li class="page-item active"><a class="page-link" href="@Url.Action("Index","CauHoiManagement",new { id=@i})">@i</a></li>
-                        }
-                        else
-                        {
-                            <li class="page-item"><a class="page-link" href="@Url.Action("Index","CauHoiManagement",new { id=@i})">@i</a></li>
-
-                        }
-                    }
-                }
-                @{
-                    if (pageIndex != totalPages)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index","CauHoiManagement",new { id=pageIndex+1})">></a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index","CauHoiManagement",new { id=totalPages})">>></a>
-                        </li>
-                    }
-                }
-            </ul>
-        </nav>
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, keysearch = ViewBag.keysearch }))
     </div>
 </div>
 

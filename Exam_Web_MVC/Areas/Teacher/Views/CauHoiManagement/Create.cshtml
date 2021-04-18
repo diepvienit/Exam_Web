@@ -7,6 +7,7 @@
 <div class="card">
     <div class="card-header">
         <h2>Thêm câu hỏi</h2>
+        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary rounded-pill btn-comeback" })
     </div>
     <div class="card-body">
         @using (Html.BeginForm())

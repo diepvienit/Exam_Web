@@ -1,81 +1,106 @@
-﻿
+﻿@model PagedList.IPagedList<Exam_Web_MVC.Models.DeThiEntity>
+@using PagedList.Mvc;
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Danh sách đề thi";
     Layout = "~/Areas/Teacher/Views/Shared/_TeacherLayout.cshtml";
 }
 
 <div class="card">
     <div class="card-header">
-        <h2>Danh sách đề thi</h2>
-        <a class="btn btn-primary rounded-pill" href="@Url.Action("Create","DeThiManagement")">Thêm Đề</a>
-        @*@Html.ActionLink("Thêm đề", "Create", null, new { @class = "btn btn-primary" })*@
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="box-action">
+        @using (Html.BeginForm("Index", "DeThiManagement", FormMethod.Get, new { @class = "form-inline margin-bottom", @role = "form" }))
+        {
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+            @Html.TextBox("keysearch", null, new { @class = "form-control", @placeholder = "Tìm tên..." })
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        }
     </div>
     <div class="card-body">
         <table class="table table-striped table-bordered">
             <tr>
-                <th>
-                    Tên đề thi
-                </th>
-                <th>
-                    Thời gian làm bài
-                </th>
-                <th>
-                    Thời gian bắt đầu
-                </th>
-                <th>
-                    Loại đề
-                </th>
-                <th>
-                    Người tạo đề
-                </th>
-                <th>
-                    Tên môn học
-                </th>
-                <th>
-                    Hành động
-                </th>
+                <th>Tên đề thi</th>
+                <th>Thời gian làm bài</th>
+                <th>Thời gian bắt đầu</th>
+                <th>Loại đề</th>
+                <th>Người tạo đề</th>
+                <th>Tên môn học</th>
+                <th>Trạng thái</th>
+                <th style="width: 200px;"></th>
             </tr>
 
-            @foreach (var item in ViewBag.ListDeThi)
+            @foreach (var item in Model)
             {
                 <tr>
                     <td>
-                        @*@Html.DisplayFor(modelItem => item.TenDeThi)*@
-                        @item.TenDeThi
+                        @Html.DisplayFor(modelItem => item.TenDeThi)
                     </td>
                     <td>
-                        @*@Html.DisplayFor(modelItem => item.ThoiGianLamBai)*@
-                        @item.ThoiGianLamBai
+                        @Html.DisplayFor(modelItem => item.ThoiGianLamBai)
                     </td>
                     <td>
-                        @*@Html.DisplayFor(modelItem => item.ThoiGianBatDauLamBai)*@
-                        @item.ThoiGianBatDauLamBai
+                        @Html.DisplayFor(modelItem => item.ThoiGianBatDauLamBai)
                     </td>
                     <td>
-                        @*@Html.DisplayFor(modelItem => item.LoaiDe)*@
-                        @item.LoaiDe
+                        @Html.DisplayFor(modelItem => item.LoaiDe)
                     </td>
                     <td>
-                        @*@Html.DisplayFor(modelItem => item.GiaoVien.TenGV)*@
-                        @item.GiaoVien.TenGV
+                        @Html.DisplayFor(modelItem => item.GiaoVien)
                     </td>
                     <td>
-                        @*@Html.DisplayFor(modelItem => item.MonHoc.TenMH)*@
-                        @item.MonHoc.TenMH
+                        @Html.DisplayFor(modelItem => item.MonHoc)
                     </td>
                     <td>
-                        <a href="@Url.Action("Edit","DeThiManagement",new { id=item.DeThiID})" style="font-size:22px;"><i class="far fa-edit" title="Sửa Đề Thi"></i></a>
-                        <a href="@Url.Action("Details","DeThiManagement",new { id=item.DeThiID})" style="font-size:22px;"><i class="fas fa-info-circle" title="Chi Tiết Đề Thi"></i></a>
-                        <a href="@Url.Action("Deleta","DeThiManagement",new { id=item.DeThiID})" style="font-size:22px;"><i class="far fa-trash-alt" title="Xóa Đề Thi"></i></a>
-                        
-    
-                        @*@Html.ActionLink("Sửa", "Edit", new { id = item.DeThiID }, new { @class = "btn btn-primary" })
-                        @Html.ActionLink("Chi tiết", "Details", new { id = item.DeThiID }, new { @class = "btn btn-success" })
-                        @Html.ActionLink("Xóa", "Delete", new { id = item.DeThiID }, new { @class = "btn btn-danger", onclick = "return confirm('Bạn có chắc chắn muốn xóa không?')" })*@
+                        @if (item.Status == 1)
+                        {
+                            <span>Chờ duyệt</span>
+                        }
+                        else if (item.Status == 2)
+                        {
+                            <span>Đã duyệt</span>
+                        }
+                        else if (item.Status == 3)
+                        {
+                            <span>Biên tập lại</span>
+                            <p><b>Lý do</b>: @item.Comment</p>
+                        }
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            @Html.ActionLink("Câu hỏi", "Details", new { id = item.DeThiID })
+                            <span>|</span>
+                            @if (item.Status == null || item.Status == 0 || item.Status == 3)
+                            {
+                                <a href="#" title="Gửi duyệt" onclick="sendReview(@item.DeThiID);">Gửi</a>
+                                <span>|</span>
+                                @Html.ActionLink("Sửa", "Edit", new { id = item.DeThiID })
+                                <span>|</span>
+                            }
+                            @if(item.Status != 2) { 
+                                @Html.ActionLink("Xóa", "Delete", new { id = item.DeThiID })
+                            }
+                        </div>
                     </td>
                 </tr>
             }
-
         </table>
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, keysearch = ViewBag.keysearch }))
     </div>
 </div>
+
+<script type="text/javascript">
+    function sendReview(dethiid) {
+        var r = confirm("Gửi duyệt đề thi!");
+            if (r == true) {
+                $.post("/Teacher/DeThiManagement/SendReview", { dethiid: dethiid }, function (data) {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert("Có lỗi sảy ra trong quá trình gửi duyệt!");
+                }
+            });
+        }
+    }
+</script>

@@ -28,7 +28,9 @@ namespace Exam_Web_Core
         public Nullable<System.DateTime> ThoiGianBatDauLamBai { get; set; }
         public string LoaiDe { get; set; }
         public Nullable<int> GiaoVienID { get; set; }
-    
+        public bool? IsActive { get; set; }
+        public string Comment { get; set; }
+
         public virtual GiaoVien GiaoVien { get; set; }
         public virtual MonHoc MonHoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

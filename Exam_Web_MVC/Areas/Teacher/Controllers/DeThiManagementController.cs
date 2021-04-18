@@ -1,45 +1,59 @@
-﻿using Exam_Web_Core;
-using Exam_Web_Core.ViewModels;
-using Exam_Web_Core.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Exam_Web_MVC.Models;
+using PagedList;
 
 namespace Exam_Web_MVC.Areas.Teacher.Controllers
 {
     public class DeThiManagementController : Controller
     {
-        private Exam_WebEntities db = new Exam_WebEntities();
-        private static Exam_WebEntities _context = new Exam_WebEntities();
-        DeThiRepository deThiRepository = new DeThiRepository(_context);
-        CauHoiRepository cauHoiRepository = new CauHoiRepository(_context);
-        GiaoVienRepository giaoVienRepository = new GiaoVienRepository(_context);
-        MonHocRepository monHocRepository = new MonHocRepository(_context);
+        private readonly PortalContext db = new PortalContext();
 
         // GET: Admin/DeThiManagement
-        public ActionResult Index()
+        public ActionResult Index(int? page, string keysearch = "")
         {
-            ViewBag.ListDeThi = deThiRepository.GetAll();
-            return View();
+            ViewBag.keysearch = keysearch;
+
+            var models = (from ad in db.DeThis
+                          where string.IsNullOrEmpty(keysearch)
+                            || ad.TenDeThi.Contains(keysearch)
+                          select new DeThiEntity()
+                          {
+                              DeThiID = ad.DeThiID,
+                              MonHocID = ad.MonHocID,
+                              TenDeThi = ad.TenDeThi,
+                              ThoiGianLamBai = ad.ThoiGianLamBai,
+                              ThoiGianBatDauLamBai = ad.ThoiGianBatDauLamBai,
+                              LoaiDe = ad.LoaiDe,
+                              GiaoVienID = ad.GiaoVienID,
+                              Status = ad.Status,
+                              Comment = ad.Comment,
+                              GiaoVien = ad.GiaoVien.TenGV,
+                              MonHoc = ad.MonHoc.TenMH
+                          }).OrderByDescending(x => x.DeThiID).ToPagedList(page ?? 1, 15);
+
+            return View(models);
         }
 
         // GET: Admin/DeThiManagement/Details/5
         public ActionResult Details(int id)
         {
-            DeThi deThi = deThiRepository.GetById(id);
-            ViewBag.CauHois = cauHoiRepository.GetCauHoiByMaDe(id);
-            Session["DeThiID"] = id;
+            var deThi = db.DeThis.Find(id);
+            ViewBag.CauHois = deThi.CauHois.ToList();
+
             return View(deThi);
         }
 
         // GET: Admin/DeThiManagement/Create
         public ActionResult Create()
         {
-            ViewBag.GiaoVienID = new SelectList(giaoVienRepository.GetAll(), "GiaoVienID", "TenGV");
-            ViewBag.MonHocID = new SelectList(monHocRepository.GetAll(), "MonHocID", "TenMH");
+            ViewBag.GiaoVienID = new SelectList(db.GiaoViens, "GiaoVienID", "TenGV");
+            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH");
+
             return View();
         }
 
@@ -52,7 +66,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         {
             if (ModelState.IsValid)
             {
-                deThiRepository.Add(deThi);
+                db.DeThis.Add(deThi);
                 return RedirectToAction("Index");
             }
 
@@ -64,10 +78,10 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // GET: Admin/DeThiManagement/Edit/5
         public ActionResult Edit(int id)
         {
-            DeThi deThi = deThiRepository.GetById(id);
+            var deThi = db.DeThis.Find(id);
             //time return from database {06/01/2017 8:32:00 AM}
-            ViewBag.GiaoVienID = new SelectList(giaoVienRepository.GetAll(), "GiaoVienID", "TenGV", deThi.GiaoVienID);
-            ViewBag.MonHocID = new SelectList(monHocRepository.GetAll(), "MonHocID", "TenMH", deThi.MonHocID);
+            ViewBag.GiaoVienID = new SelectList(db.GiaoViens, "GiaoVienID", "TenGV", deThi.GiaoVienID);
+            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", deThi.MonHocID);
             return View(deThi);
         }
 
@@ -76,7 +90,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "DeThiID,MonHocID,TenDeThi,ThoiGianLamBai,ThoiGianBatDauLamBai,LoaiDe,GiaoVienID")] DeThi deThi)
+        public ActionResult Edit([Bind()] DeThi deThi)
         {
             if (ModelState.IsValid)
             {
@@ -84,84 +98,123 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.GiaoVienID = new SelectList(giaoVienRepository.GetAll(), "GiaoVienID", "TenGV", deThi.GiaoVienID);
-            ViewBag.MonHocID = new SelectList(monHocRepository.GetAll(), "MonHocID", "TenMH", deThi.MonHocID);
+            ViewBag.GiaoVienID = new SelectList(db.GiaoViens, "GiaoVienID", "TenGV", deThi.GiaoVienID);
+            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", deThi.MonHocID);
             return View(deThi);
         }
 
         // GET: Admin/DeThiManagement/Delete/5
         public ActionResult Delete(int id)
         {
-            DeThi deThi = deThiRepository.GetById(id);
-            deThiRepository.Delete(deThi);
+            DeThi deThi = db.DeThis.Find(id);
+            db.DeThis.Remove(deThi);
+            db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
         public ActionResult AddQuestionManual(int id)
         {
-            ViewBag.TenDeThi = deThiRepository.GetById(id).TenDeThi;
-            int DeThi_MonHocId = (int)deThiRepository.GetById(id).MonHocID;
-            ViewBag.CauHois = cauHoiRepository.GetCauHoiForDeThi(id, DeThi_MonHocId);
+            ViewBag.id = id;
+            var dethi = db.DeThis.Find(id);
+
+            if (dethi != null)
+            {
+                ViewBag.TenDeThi = dethi.TenDeThi;
+                ViewBag.CauHois = dethi.CauHois.ToList();
+            }
+
             return View();
         }
 
         //Add question to de thi
-        public ActionResult AddQuestion(int id)
+        public ActionResult AddQuestion(int id, int dethiid)
         {
             //TempData.Keep("DeThiID");
-            CauHoi cauHoi = cauHoiRepository.GetById(id);
-            DeThi deThi = deThiRepository.GetById((int)Session["DeThiID"]);
+            CauHoi cauHoi = db.CauHois.Find(id);
+
+            DeThi deThi = db.DeThis.Find(dethiid);
             cauHoi.DeThis.Add(deThi);
-            cauHoiRepository.Update(cauHoi);
-            return RedirectToAction("AddQuestionManual", new { id = (int)Session["DeThiID"] });
+
+            db.Entry(cauHoi).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("AddQuestionManual", new { id = dethiid });
         }
 
         //Remove question from de thi
-        public ActionResult RemoveQuestion(int id)
+        public ActionResult RemoveQuestion(int id, int dethiid)
         {
-            CauHoi cauHoi = cauHoiRepository.GetById(id);
-            DeThi deThi = deThiRepository.GetById((int)Session["DeThiID"]);
+            CauHoi cauHoi = db.CauHois.Find(id);
+            DeThi deThi = db.DeThis.Find(dethiid);
+
             deThi.CauHois.Remove(cauHoi);
-            deThiRepository.Update(deThi);
-            return RedirectToAction("Details", new { id = (int)Session["DeThiID"] });
+
+            db.Entry(cauHoi).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = dethiid });
         }
 
         public ActionResult AddQuestionAuto(int id)
         {
-            ViewBag.TenDeThi = deThiRepository.GetById(id).TenDeThi;
+            ViewBag.id = id;
+            var dethi = db.DeThis.Find(id);
+            if (dethi != null)
+            {
+                ViewBag.TenDeThi = dethi.TenDeThi;
+            }
             return View();
         }
 
         [HttpPost]
-        public ActionResult AddQuestionAuto(AddQuestionAuto_Model model)
+        public ActionResult AddQuestionAuto(int dethiid, int SoCauDe, int SoCauTrungBinh, int SoCauKho, int SoCauRatKho)
         {
-            DeThi deThi = deThiRepository.GetById((int)Session["DeThiID"]);
-            var listCauDe = cauHoiRepository.GetRandomCauHoiByDoKho(1, (int)deThi.MonHocID, model.SoCauDe);
+            DeThi deThi = db.DeThis.Find(dethiid);
+            var listCauDe = db.CauHois.Where(x => x.DoKhoID == 1).OrderBy(x => Guid.NewGuid()).Take(SoCauDe);
             foreach (var item in listCauDe)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
                 deThi.CauHois.Add(item);
             }
-            var listCauTrungBinh = cauHoiRepository.GetRandomCauHoiByDoKho(2, (int)deThi.MonHocID, model.SoCauDe);
+            var listCauTrungBinh = db.CauHois.Where(x => x.DoKhoID == 2).OrderBy(x => Guid.NewGuid()).Take(SoCauTrungBinh);
             foreach (var item in listCauTrungBinh)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
                 deThi.CauHois.Add(item);
             }
-            var listCauKho = cauHoiRepository.GetRandomCauHoiByDoKho(3, (int)deThi.MonHocID, model.SoCauDe);
+            var listCauKho = db.CauHois.Where(x => x.DoKhoID == 3).OrderBy(x => Guid.NewGuid()).Take(SoCauKho);
             foreach (var item in listCauKho)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
                 deThi.CauHois.Add(item);
             }
-            var listCauRatKho = cauHoiRepository.GetRandomCauHoiByDoKho(4, (int)deThi.MonHocID, model.SoCauDe);
+            var listCauRatKho = db.CauHois.Where(x => x.DoKhoID == 4).OrderBy(x => Guid.NewGuid()).Take(SoCauRatKho);
             foreach (var item in listCauRatKho)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
                 deThi.CauHois.Add(item);
             }
-            deThiRepository.Update(deThi);
-            return RedirectToAction("Details", "DeThiManagement", new { id = (int)Session["DeThiID"] });
+
+            db.Entry(deThi).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Details", "DeThiManagement", new { id = dethiid });
+        }
+
+        [HttpPost, ActionName("SendReview")]
+        public JsonResult SendReview(int dethiid)
+        {
+            var dethi = db.DeThis.Find(dethiid);
+            if (dethi != null)
+            {
+                dethi.Status = 1;
+
+                db.Entry(dethi).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
     }
 }
