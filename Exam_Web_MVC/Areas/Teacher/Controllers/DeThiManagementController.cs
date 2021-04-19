@@ -67,6 +67,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
             if (ModelState.IsValid)
             {
                 db.DeThis.Add(deThi);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
