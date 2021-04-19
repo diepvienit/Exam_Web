@@ -50,15 +50,15 @@
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Trạng thái:</label>
                 <div class="col-sm-10">
-                    @if (Model.IsActive == true)
+                    @if (Model.Status == 2)
                     {
                         <span class="exam-info">Đã duyệt</span>
                     }
-                    else if (Model.IsActive == null)
+                    else if (Model.Status == 1)
                     {
                         <span class="exam-info">Đang chờ duyệt</span>
                     }
-                    else
+                    else if (Model.Status == 3)
                     {
                         <span class="exam-info">Yêu cầu biên tập lại</span>
                     }
