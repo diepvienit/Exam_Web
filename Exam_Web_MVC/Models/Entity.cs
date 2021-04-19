@@ -36,4 +36,18 @@ namespace Exam_Web_MVC.Models
         public string DoKho { get; set; }
         public string MonHoc { get; set; }
     }
+
+    public partial class GiaoVienEntity
+    {
+        public int GiaoVienID { get; set; }
+        public int? TaiKhoanID { get; set; }
+        public string TenGV { get; set; }
+        public DateTime? NgaySinh { get; set; }
+        public bool? GioiTinh { get; set; }
+        public string Email { get; set; }
+        public int? MonHocID { get; set; }
+        public int? HocViID { get; set; }
+        public string HocVi { get; set; }
+        public string MonHoc { get; set; }
+    }
 }

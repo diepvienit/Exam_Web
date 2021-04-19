@@ -10735,6 +10735,8 @@ body {
     padding-left: 0;
     height: 56px;
     z-index: 1039;
+    margin-bottom: 0;
+    border-radius: 0;
 }
 
 .sb-topnav .navbar-brand {
@@ -10901,7 +10903,7 @@ body {
 .pagination {
     justify-content: flex-end;
     margin-bottom: 0;
-}  
+}
 
 .pagination li {
     padding: 0 2px;
@@ -10927,19 +10929,30 @@ body {
     box-shadow: none;
 }
 
-.control-label{
+.control-label {
     text-align: right;
     font-weight: bold;
 }
 
-.box-action a, .box-action input, .box-action select{
+.box-action a, .box-action input, .box-action select {
     margin: 0 5px;
 }
 
-a:hover{
+a:hover {
     text-decoration: none;
 }
 
-.review-status{
+.review-status {
     display: none;
+}
+
+.btn-comeback {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.input-group-addon, .input-group-btn{
+    min-width: 40px;
+    line-height: 24px;
 }

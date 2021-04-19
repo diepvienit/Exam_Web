@@ -1,0 +1,49 @@
+﻿@model Exam_Web_MVC.Models.GiaoVienEntity
+@{
+    ViewBag.Title = "Thay đổi mật khẩu";
+    Layout = "~/Areas/Teacher/Views/Shared/_TeacherLayout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h2>@ViewBag.Title</h2>
+        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary rounded-pill btn-comeback" })
+    </div>
+    @using (Html.BeginForm())
+    {
+        <div class="box-action">
+            <input type="submit" value="Lưu" class="btn btn-primary" />
+        </div>
+        <div class="card-body">
+            <div class="form-horizontal user-info">
+                <div class="form-group row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        <span style="color:#ff0000;">@ViewBag.errorMess</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="control-label col-md-2">Mật khẩu cũ</div>
+                    <div class="col-md-4">
+                        <input type="password" name="oldPass" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="control-label col-md-2">Mật khẩu mới</div>
+                    <div class="col-md-4">
+                        <input type="password" name="newPass" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="control-label col-md-2">Xác nhận mật khẩu</div>
+                    <div class="col-md-4">
+                        <input type="password" name="confirmPass" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

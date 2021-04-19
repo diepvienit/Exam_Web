@@ -7,7 +7,7 @@
 <div class="card">
     <div class="card-header">
         <h2>Sửa Đề</h2>
-        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary rounded-pill btn-comeback" })
+        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary btn-comeback" })
     </div>
     @using (Html.BeginForm())
     {
@@ -20,6 +20,7 @@
             <div class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.DeThiID)
+                @Html.HiddenFor(model => model.GiaoVienID)
 
                 <div class="form-group row">
                     <div class="control-label col-md-2">Môn học</div>
@@ -46,14 +47,6 @@
                 </div>
 
                 <div class="form-group row">
-                    <div class="control-label col-md-2">Người ra đề</div>
-                    <div class="col-md-10">
-                        @Html.DropDownList("GiaoVienID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.GiaoVienID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group row">
                     <div class="control-label col-md-2">Loại đề</div>
                     <div class="col-md-10">
                         @Html.DropDownList("LoaiDe", new List<SelectListItem> {
@@ -65,29 +58,17 @@
                     </div>
                 </div>
 
-                <div class="form-group row" id="ThoiGianBatDauLamBai">
-                    <div class="control-label col-md-4">Thời gian bắt đầu làm bài</div>
-                    <div class="col-md-10">
-                        @{
-                            DateTime dt = (DateTime)Model.ThoiGianBatDauLamBai;
-                        }
-                        <input type="datetime-local" class="form-control" name="ThoiGianBatDauLamBai" id="ThoiGianBatDauLamBai" value="@dt.ToString("yyyy-MM-dd")T@(dt.ToString("HH:mm"))" />
+                <div class="form-group row">
+                    <div class="control-label col-md-2">Bắt đầu</div>
+                    <div class="col-md-3">
+                        <div class="input-group date form_datetime" data-date="" data-date-format="dd/mm/yyyy hh:ii">
+                            <input type="text" value="@ViewBag.strStartDate" name="strStartDate" class="form-control" readonly="readonly" />
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     }
 </div>
-<script>
-    var loaiDe = document.getElementById("LoaiDe").value;
-    function CheckLoaiDe() {
-        loaiDe = document.getElementById("LoaiDe").value;
-    }
-    setInterval(() => {
-        if (loaiDe == "final test") {
-            document.getElementById("ThoiGianBatDauLamBai").style.opacity = 1;
-        } else {
-            document.getElementById("ThoiGianBatDauLamBai").style.opacity = 0;
-        }
-    }, 200)
-</script>

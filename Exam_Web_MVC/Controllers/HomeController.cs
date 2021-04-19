@@ -38,6 +38,7 @@ namespace Exam_Web_MVC.Controllers
                 if (user!=null)
                 {
                     Session["TaiKhoanID_session"] = user.TaiKhoanID;
+                    Session["UserName"] = user.UserName;
                     if (user.Role == "admin")
                     {
                         return RedirectToAction("Index", "HomeAdmin", new { Area = "Admin" });

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -51,9 +52,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // GET: Admin/DeThiManagement/Create
         public ActionResult Create()
         {
-            ViewBag.GiaoVienID = new SelectList(db.GiaoViens, "GiaoVienID", "TenGV");
             ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH");
-
             return View();
         }
 
@@ -62,28 +61,47 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DeThi deThi)
+        public ActionResult Create(DeThi model, string strStartDate)
         {
+            strStartDate += ":00";
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
+
+            if(userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+            if (userInfo == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            model.GiaoVienID = userInfo.GiaoVienID;
+
+            model.ThoiGianBatDauLamBai = DateTime.ParseExact(strStartDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+
+            ModelState.Clear();
+            TryValidateModel(model);
+
             if (ModelState.IsValid)
             {
-                db.DeThis.Add(deThi);
+                db.DeThis.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            //ViewBag.GiaoVienID = new SelectList(db.GiaoViens, "GiaoVienID", "TenGV", deThi.GiaoVienID);
-            //ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", deThi.MonHocID);
             return View();
         }
 
         // GET: Admin/DeThiManagement/Edit/5
         public ActionResult Edit(int id)
         {
-            var deThi = db.DeThis.Find(id);
-            //time return from database {06/01/2017 8:32:00 AM}
-            ViewBag.GiaoVienID = new SelectList(db.GiaoViens, "GiaoVienID", "TenGV", deThi.GiaoVienID);
-            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", deThi.MonHocID);
-            return View(deThi);
+            var model = db.DeThis.Find(id);
+
+            ViewBag.strStartDate = string.Format("{0:dd/MM/yyyy HH:mm}", model.ThoiGianBatDauLamBai);
+            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", model.MonHocID);
+            return View(model);
         }
 
         // POST: Admin/DeThiManagement/Edit/5
@@ -91,17 +109,22 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind()] DeThi deThi)
+        public ActionResult Edit([Bind()] DeThi model, string strStartDate)
         {
+            strStartDate += ":00";
+
+            model.ThoiGianBatDauLamBai = DateTime.ParseExact(strStartDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            ModelState.Clear();
+            TryValidateModel(model);
+
             if (ModelState.IsValid)
             {
-                db.Entry(deThi).State = EntityState.Modified;
+                db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            ViewBag.GiaoVienID = new SelectList(db.GiaoViens, "GiaoVienID", "TenGV", deThi.GiaoVienID);
-            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", deThi.MonHocID);
-            return View(deThi);
+            return View(model);
         }
 
         // GET: Admin/DeThiManagement/Delete/5

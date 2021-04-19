@@ -1,0 +1,73 @@
+﻿@model Exam_Web_MVC.Models.GiaoVienEntity
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+    Layout = "~/Areas/Teacher/Views/Shared/_TeacherLayout.cshtml";
+}
+
+<style type="text/css">
+    .user-info .form-group {
+        margin-bottom: 0;
+    }
+    .user-info .form-group span{
+        line-height: 40px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h2>@ViewBag.Title</h2>
+        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary rounded-pill btn-comeback" })
+    </div>
+    <div class="box-action">
+        @Html.ActionLink("Đổi mật khẩu", "ChangePass", null, new { @class = "btn btn-primary" })
+    </div>
+    <div class="card-body">
+        <div class="form-horizontal user-info">
+            <div class="form-group row">
+                <div class="control-label col-md-3">Họ tên</div>
+                <div class="col-md-9">
+                    <span>@Model.TenGV</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="control-label col-md-3">Ngày sinh</div>
+                <div class="col-md-9">
+                    <span>@string.Format("{0:dd/MM/yyyy}", Model.NgaySinh)</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="control-label col-md-3">Giới tính</div>
+                <div class="col-md-9">
+                    @if (Model.GioiTinh == true)
+                    {
+                        <span>Nam</span>
+                    }
+                    else
+                    {
+                        <span>Nữ</span>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="control-label col-md-3">Email</div>
+                <div class="col-md-9">
+                    <span>@Model.Email</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="control-label col-md-3">Học vị</div>
+                <div class="col-md-9">
+                    <span>@Model.HocVi</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="control-label col-md-3">Dạy môn</div>
+                <div class="col-md-9">
+                    <span>@Model.MonHoc</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
