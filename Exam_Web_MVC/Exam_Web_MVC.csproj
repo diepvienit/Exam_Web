@@ -135,6 +135,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\CauHoiManagementController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ContactController.cs" />
     <Compile Include="Areas\Admin\Controllers\DeThiManagementController.cs" />
     <Compile Include="Areas\Admin\Controllers\GiaoVienManagementController.cs" />
     <Compile Include="Areas\Admin\Controllers\HocSinhManagementController.cs" />
@@ -304,6 +305,8 @@
     <Content Include="Content\Plugins\bootstrap-3.1.1-dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Areas\Teacher\Views\Teacher\UserInfo.cshtml" />
     <Content Include="Areas\Teacher\Views\Teacher\ChangePass.cshtml" />
+    <Content Include="Areas\Admin\Views\DeThiManagement\Students.cshtml" />
+    <Content Include="Areas\Admin\Views\Contact\Index.cshtml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />

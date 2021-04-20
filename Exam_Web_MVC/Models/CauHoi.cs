@@ -36,6 +36,9 @@ namespace Exam_Web_MVC.Models
         [StringLength(1)]
         public string CauTraLoiDung { get; set; }
 
+        [StringLength(255)]
+        public string Image { get; set; }
+
         public int? DoKhoID { get; set; }
 
         public int? MonHocID { get; set; }

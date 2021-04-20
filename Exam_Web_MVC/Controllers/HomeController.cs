@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Exam_Web_Core.ViewModels;
-using Exam_Web_Core;
-using Exam_Web_Core.Repositories;
+using Exam_Web_MVC.Models;
 
 namespace Exam_Web_MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private static Exam_WebEntities _context = new Exam_WebEntities();
-        TaiKhoanRepository taiKhoanRepository = new TaiKhoanRepository(_context);
-        HocSinhRepository hocSinhRepository = new HocSinhRepository(_context);
-        DeThiRepository deThiRepository = new DeThiRepository(_context);
-        MonHocRepository monHocRepository = new MonHocRepository(_context);
-        LienHeRepository lienHeRepository = new LienHeRepository(_context);
-        LanThiRepository lanThiRepository = new LanThiRepository(_context);
+        private readonly PortalContext db = new PortalContext();
         // GET: Home
         public ActionResult Index()
         {
-            return View(deThiRepository.GetAll().OrderByDescending(x=>x.DeThiID));
+            return View(db.DeThis.OrderByDescending(x => x.DeThiID).ToList());
         }
 
         public ActionResult Login()
@@ -34,8 +27,8 @@ namespace Exam_Web_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                TaiKhoan user = taiKhoanRepository.GetTaiKhoanByUserNameAndPassword(taiKhoan.UserName, taiKhoan.Password);
-                if (user!=null)
+                TaiKhoan user = db.TaiKhoans.FirstOrDefault(x => x.UserName == taiKhoan.UserName && x.Password == taiKhoan.Password);
+                if (user != null)
                 {
                     Session["TaiKhoanID_session"] = user.TaiKhoanID;
                     Session["UserName"] = user.UserName;
@@ -47,7 +40,7 @@ namespace Exam_Web_MVC.Controllers
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    else if (user.Role=="teacher")
+                    else if (user.Role == "teacher")
                     {
                         return RedirectToAction("Index", "HomeTeacher", new { Area = "Teacher" });
                     }
@@ -66,19 +59,25 @@ namespace Exam_Web_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                TaiKhoan taiKhoan = new TaiKhoan();
-                taiKhoan.UserName = viewModel.UserName;
-                taiKhoan.Password = viewModel.Password;
-                taiKhoan.Role = "student";
-                taiKhoanRepository.Add(taiKhoan);
+                var taiKhoan = new TaiKhoan
+                {
+                    UserName = viewModel.UserName,
+                    Password = viewModel.Password,
+                    Role = "student"
+                };
 
-                HocSinh hocSinh = new HocSinh();
-                hocSinh.TaiKhoanID = taiKhoanRepository.GetByUsername(viewModel.UserName).TaiKhoanID;
-                hocSinh.TenHS = viewModel.TenHS;
-                hocSinh.NgaySinh = viewModel.NgaySinh;
-                hocSinh.GioiTinh = viewModel.GioiTinh;
-                hocSinh.Email = viewModel.Email;
-                hocSinhRepository.Add(hocSinh);
+                var hocSinh = new HocSinh
+                {
+                    TenHS = viewModel.TenHS,
+                    NgaySinh = viewModel.NgaySinh,
+                    GioiTinh = viewModel.GioiTinh,
+                    Email = viewModel.Email
+                };
+
+                taiKhoan.HocSinhs.Add(hocSinh);
+                db.TaiKhoans.Add(taiKhoan);
+                db.SaveChanges();
+
                 return RedirectToAction("Login");
             }
             return View(viewModel);
@@ -86,37 +85,37 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult ListExam(int id)
         {
-            List<DeThiDetail_Model> listDeThiDetail = new List<DeThiDetail_Model>();
-            List<DeThi> DeThis = deThiRepository.GetDeThiByMaMonHoc(id).ToList();
-            for (int i = 0; i < DeThis.Count(); i++)
-            {
-                DeThiDetail_Model deThi = new DeThiDetail_Model();
-                deThi.DeThiID = DeThis[i].DeThiID;
-                deThi.MonHocID = DeThis[i].MonHocID;
-                deThi.TenDeThi = DeThis[i].TenDeThi;
-                deThi.ThoiGianLamBai = DeThis[i].ThoiGianLamBai;
-                deThi.ThoiGianBatDauLamBai = DeThis[i].ThoiGianBatDauLamBai;
-                deThi.LoaiDe = DeThis[i].LoaiDe;
-                deThi.GiaoVienID = DeThis[i].GiaoVienID;
-                deThi.NumberQuestion = deThiRepository.CountQuestionByMaDeThi(DeThis[i].DeThiID);
-                listDeThiDetail.Add(deThi);
-            }
+            var listDeThiDetail = (from ad in db.DeThis
+                                   where ad.MonHocID == id
+                                   select new DeThiDetail_Model()
+                                   {
+                                       DeThiID = ad.DeThiID,
+                                       MonHocID = ad.MonHocID,
+                                       TenDeThi = ad.TenDeThi,
+                                       ThoiGianLamBai = ad.ThoiGianLamBai,
+                                       ThoiGianBatDauLamBai = ad.ThoiGianBatDauLamBai,
+                                       LoaiDe = ad.LoaiDe,
+                                       GiaoVienID = ad.GiaoVienID,
+                                       NumberQuestion = ad.CauHois.Count
+                                   }).ToList();
+
             ViewBag.DeThi = listDeThiDetail;
-            ViewBag.MonHoc = monHocRepository.GetById(id);
+            ViewBag.MonHoc = db.MonHocs.Find(id);
             return View();
         }
 
         public ActionResult Logout()
         {
             Session["TaiKhoanID_session"] = null;
-            return RedirectToAction("Login","Home");
+            return RedirectToAction("Login", "Home");
         }
 
         public ActionResult UserDetail()
         {
             UserDetail_Model model = new UserDetail_Model();
-            var hocSinh = hocSinhRepository.GetHocSinhByTaiKhoanID((int)Session["TaiKhoanID_session"]);
-            var taiKhoan = taiKhoanRepository.GetById((int)Session["TaiKhoanID_session"]);
+            var hocSinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == (int)Session["TaiKhoanID_session"]);
+            var taiKhoan = db.TaiKhoans.FirstOrDefault(x => x.TaiKhoanID == (int)Session["TaiKhoanID_session"]);
+
             model.HocSinhID = hocSinh.HocSinhID;
             model.TenHS = hocSinh.TenHS;
             model.Email = hocSinh.Email;
@@ -132,13 +131,17 @@ namespace Exam_Web_MVC.Controllers
         [HttpPost]
         public ActionResult UserDetail(UserDetail_Model model)
         {
-            HocSinh hocSinh = hocSinhRepository.GetHocSinhByTaiKhoanID((int)Session["TaiKhoanID_session"]);
-            TaiKhoan taiKhoan = taiKhoanRepository.GetById((int)Session["TaiKhoanID_session"]);
+            var hocSinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == (int)Session["TaiKhoanID_session"]);
+            var taiKhoan = db.TaiKhoans.FirstOrDefault(x => x.TaiKhoanID == (int)Session["TaiKhoanID_session"]);
+
             hocSinh.TenHS = model.TenHS;
             hocSinh.Email = model.Email;
             hocSinh.GioiTinh = model.GioiTinh;
             hocSinh.NgaySinh = DateTime.ParseExact(model.NgaySinh, "yyyy-MM-dd", null);
-            hocSinhRepository.Update(hocSinh);
+
+            db.Entry(hocSinh).State = EntityState.Modified;
+            db.SaveChanges();
+
             model.Role = taiKhoan.Role;
             model.Username = taiKhoan.UserName;
             //Quy uoc success la 1 
@@ -154,11 +157,14 @@ namespace Exam_Web_MVC.Controllers
         [HttpPost]
         public ActionResult ChangePassword(ChangePassword_Model model)
         {
-            var taiKhoan = taiKhoanRepository.GetById((int)Session["TaiKhoanID_session"]);
+            var taiKhoan = db.TaiKhoans.FirstOrDefault(x => x.TaiKhoanID == (int)Session["TaiKhoanID_session"]);
             if (taiKhoan.Password == model.OldPassword)
             {
                 taiKhoan.Password = model.NewPassword;
-                taiKhoanRepository.Update(taiKhoan);
+
+                db.Entry(taiKhoan).State = EntityState.Modified;
+                db.SaveChanges();
+
                 ViewBag.AlertMessage = "1";
                 return View();
             }
@@ -178,17 +184,38 @@ namespace Exam_Web_MVC.Controllers
         public ActionResult Contact(LienHe lienHe)
         {
             lienHe.NgayGui = DateTime.Now;
-            lienHeRepository.Add(lienHe);
-            ViewBag.Message = "1";
-            return View();
+
+            if (int.TryParse(Convert.ToString(Session["TaiKhoanID_session"]), out int taiKhoanId))
+            {
+                var hocSinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == taiKhoanId);
+
+                lienHe.HocSinhID = hocSinh.HocSinhID;
+
+                db.LienHes.Add(lienHe);
+                db.SaveChanges();
+
+                ViewBag.Message = "1";
+                return View();
+            }
+            else
+            {
+                return Redirect("/Home/Login");
+            }
         }
 
         public ActionResult ListResult()
         {
-            HocSinh hocSinh = hocSinhRepository.GetHocSinhByTaiKhoanID((int)Session["TaiKhoanID_session"]);
+            int.TryParse(Session["TaiKhoanID_session"].ToString(), out int taiKhoanId);
+            var hocSinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == taiKhoanId);
+
+            if (hocSinh == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             ViewBag.TenHS = hocSinh.TenHS;
             List<ListResult_Model> listResults = new List<ListResult_Model>();
-            List<LanThi> listLanThi = lanThiRepository.GetLanThiByHocSinhID(hocSinh.HocSinhID).ToList();
+            List<LanThi> listLanThi = db.LanThis.Where(x => x.HocSinhID == hocSinh.HocSinhID).ToList();
             for (int i = 0; i < listLanThi.Count(); i++)
             {
                 ListResult_Model model = new ListResult_Model();

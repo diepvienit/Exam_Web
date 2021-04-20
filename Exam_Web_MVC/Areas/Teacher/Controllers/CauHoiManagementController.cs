@@ -3,6 +3,7 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,7 +22,6 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
 
         public ActionResult Index(int? page, string keysearch = "")
         {
-            int pageIndex = 1;
             ViewBag.keysearch = keysearch;
 
             var models = (from ad in db.CauHois
@@ -39,7 +39,8 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
                               DoKhoID = ad.DoKhoID,
                               MonHocID = ad.MonHocID,
                               DoKho = ad.DoKho.TenDoKho,
-                              MonHoc = ad.MonHoc.TenMH
+                              MonHoc = ad.MonHoc.TenMH,
+                              Image = ad.Image
                           }).OrderByDescending(x => x.CauHoiID).ToPagedList(page ?? 1, 10);
 
             ViewBag.stt = (models.PageNumber - 1) * 10 + 1;
@@ -67,10 +68,20 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CauHoi cauHoi)
+        public ActionResult Create(CauHoi cauHoi, HttpPostedFileBase urlImage)
         {
             if (ModelState.IsValid)
             {
+                if (urlImage.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(urlImage.FileName);
+                    string extension = Path.GetExtension(urlImage.FileName);
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    cauHoi.Image = "/Content/Uploads/UploadImages/" + fileName;
+                    fileName = Path.Combine(Server.MapPath("~/Content/Uploads/UploadImages/"), fileName);
+                    urlImage.SaveAs(fileName);
+                }
+
                 db.CauHois.Add(cauHoi);
                 db.SaveChanges();
 
@@ -94,10 +105,20 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CauHoi cauHoi)
+        public ActionResult Edit(CauHoi cauHoi, HttpPostedFileBase urlImage)
         {
             if (ModelState.IsValid)
             {
+                if (urlImage.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(urlImage.FileName);
+                    string extension = Path.GetExtension(urlImage.FileName);
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    cauHoi.Image = "/Content/Uploads/UploadImages/" + fileName;
+                    fileName = Path.Combine(Server.MapPath("~/Content/Uploads/UploadImages/"), fileName);
+                    urlImage.SaveAs(fileName);
+                }
+
                 db.Entry(cauHoi).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

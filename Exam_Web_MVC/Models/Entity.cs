@@ -35,6 +35,7 @@ namespace Exam_Web_MVC.Models
         public int? MonHocID { get; set; }
         public string DoKho { get; set; }
         public string MonHoc { get; set; }
+        public string Image { get; set; }
     }
 
     public partial class GiaoVienEntity
@@ -49,5 +50,85 @@ namespace Exam_Web_MVC.Models
         public int? HocViID { get; set; }
         public string HocVi { get; set; }
         public string MonHoc { get; set; }
+    }
+
+    public partial class HocSinhEntity
+    {
+        public int HocSinhID { get; set; }
+        public int? TaiKhoanID { get; set; }
+        public string TenHS { get; set; }
+        public DateTime? NgaySinh { get; set; }
+        public bool? GioiTinh { get; set; }
+        public string Email { get; set; }
+        public string KetQua { get; set; }
+        public int? ThoiGianLamBai { get; set; }
+        public DateTime? ThoiGianNopBai { get; set; }
+    }
+
+    public class HocSinh_TaiKhoan_Model
+    {
+        //HocSinh
+        public int HocSinhID { get; set; }
+        public Nullable<int> TaiKhoanID { get; set; }
+        public string TenHS { get; set; }
+        public Nullable<System.DateTime> NgaySinh { get; set; }
+        public Nullable<bool> GioiTinh { get; set; }
+        public string Email { get; set; }
+
+        //TaiKhoan
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Role { get; set; }
+    }
+
+    public class DeThiDetail_Model
+    {
+        public int DeThiID { get; set; }
+        public Nullable<int> MonHocID { get; set; }
+        public string TenDeThi { get; set; }
+        public Nullable<int> ThoiGianLamBai { get; set; }
+        public Nullable<System.DateTime> ThoiGianBatDauLamBai { get; set; }
+        public string LoaiDe { get; set; }
+        public Nullable<int> GiaoVienID { get; set; }
+        public int NumberQuestion { get; set; }
+    }
+
+    public class UserDetail_Model
+    {
+        public int HocSinhID { get; set; }
+        public string TenHS { get; set; }
+        public string Email { get; set; }
+        public string Username { get; set; }
+        public string Role { get; set; }
+        public bool? GioiTinh { get; set; }
+        public string NgaySinh { get; set; }
+    }
+
+    public class ChangePassword_Model
+    {
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmNewPassword { get; set; }
+    }
+
+    public class ListResult_Model
+    {
+        public string MonHoc { get; set; }
+        public string TenDeThi { get; set; }
+        public string LoaiDe { get; set; }
+        public int LanThi { get; set; }
+        public string ThoiGianLamBai { get; set; }
+        public string ThoiGianNopBai { get; set; }
+        public double Diem { get; set; }
+    }
+
+    public partial class LienHeEntity
+    {
+        public int LienHeID { get; set; }
+        public string HoVaTen { get; set; }
+        public string Email { get; set; }
+        public string PhanHoi { get; set; }
+        public DateTime? NgayGui { get; set; }
+        public int HocSinhID { get; set; }
     }
 }

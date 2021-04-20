@@ -1,0 +1,63 @@
+﻿@model PagedList.IPagedList<Exam_Web_MVC.Models.HocSinhEntity>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Danh sách thí sinh";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int stt = ViewBag.stt;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="box-action">
+        @using (Html.BeginForm("Students", "DeThiManagement", FormMethod.Get, new { @class = "form-inline margin-bottom", @role = "form" }))
+        {
+            <div class="form-group">
+                @Html.TextBox("keysearch", null, new { @class = "form-control", @placeholder = "Tìm tên..." })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+        }
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th>T/g nộp bài</th>
+                <th>T/g làm bài</th>
+                <th>Kết quả</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @stt
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenHS)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ThoiGianNopBai)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ThoiGianLamBai)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.KetQua)
+                    </td>
+                </tr>
+
+                stt++;
+            }
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("Students", new { page, keysearch = ViewBag.keysearch }))
+    </div>
+</div>
+
+
+

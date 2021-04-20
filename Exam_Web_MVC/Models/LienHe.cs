@@ -20,5 +20,6 @@ namespace Exam_Web_MVC.Models
         public string PhanHoi { get; set; }
 
         public DateTime? NgayGui { get; set; }
+        public int HocSinhID { get; set; }
     }
 }

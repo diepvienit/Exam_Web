@@ -54,6 +54,63 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
             return View(deThi);
         }
 
+        public ActionResult Students(int id, int? page, string keysearch = "")
+        {
+            // Lấy danh sách lần thi thuộc bài thi
+            var lanThis = db.LanThis.Where(x => x.DeThiID == id).OrderByDescending(x => x.ThoiGianNopBai).ToList();
+            var hocSinhIds = lanThis.Select(x => x.HocSinhID).Distinct().ToList();
+            var lanThiIds = lanThis.Select(x => x.LanThiID).Distinct().ToList();
+
+            // Lấy danh sách học sinh
+            var hocSinhs = (from ad in db.HocSinhs
+                            where hocSinhIds.Contains(ad.HocSinhID)
+                             && ad.TenHS.Contains(keysearch)
+                            select new HocSinhEntity()
+                            {
+                                HocSinhID = ad.HocSinhID,
+                                TaiKhoanID = ad.TaiKhoanID,
+                                TenHS = ad.TenHS,
+                                NgaySinh = ad.NgaySinh,
+                                GioiTinh = ad.GioiTinh,
+                                Email = ad.Email,
+                            }).OrderByDescending(x => x.TenHS).ToPagedList(page ?? 1, 15);
+
+            // Lấy danh sách câu hỏi
+            var cauHois = db.DeThis.Find(id).CauHois.ToList();
+
+            // Lấy danh sách đáp án đã chọn
+            var dapAnDaChons = db.DapAnDaLuaChons.Where(x => lanThiIds.Contains(x.LanThiID.Value)).ToList();
+
+            foreach (var item in hocSinhs)
+            {
+                var lanThi = lanThis.FirstOrDefault(x => x.HocSinhID == item.HocSinhID);
+                if (lanThi != null)
+                {
+                    item.ThoiGianLamBai = lanThi.ThoiGianLamBai;
+                    item.ThoiGianNopBai = lanThi.ThoiGianNopBai;
+                    var dapAnDaChonOfUser = dapAnDaChons.Where(x => x.LanThiID == lanThi.LanThiID).ToList();
+
+                    if (dapAnDaChonOfUser != null && dapAnDaChonOfUser.Count > 0)
+                    {
+                        var dapAnDung = 0;
+                        foreach (var dachon in dapAnDaChonOfUser)
+                        {
+                            var cauHoi = cauHois.FirstOrDefault(x => x.CauHoiID == dachon.CauHoiID);
+                            if (cauHoi != null && dachon.DapAnDaChon == cauHoi.CauTraLoiDung)
+                            {
+                                dapAnDung++;
+                            }
+                        }
+                        item.KetQua = string.Format("{0}/{1}", dapAnDung, cauHois.Count);
+                    }
+                }
+            }
+
+            ViewBag.stt = (hocSinhs.PageNumber - 1) * 15 + 1;
+
+            return View(hocSinhs);
+        }
+
         [HttpPost, ActionName("ReviewFalse")]
         public ActionResult ReviewExam(int id, int status, string comment)
         {

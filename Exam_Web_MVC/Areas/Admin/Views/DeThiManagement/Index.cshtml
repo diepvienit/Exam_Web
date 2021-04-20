@@ -34,7 +34,7 @@
                 <th>Người tạo đề</th>
                 <th>Tên môn học</th>
                 <th>Trạng thái</th>
-                <th style="width: 40px;"></th>
+                <th style="width: 160px;"></th>
             </tr>
 
             @foreach (var item in Model)
@@ -74,6 +74,8 @@
                     </td>
                     <td>
                         <div class="text-center">
+                            @Html.ActionLink("Hoc sinh", "Students", new { id = item.DeThiID })
+                            <span>|</span>
                             @Html.ActionLink("Xem", "Details", new { id = item.DeThiID })
                         </div>
                     </td>

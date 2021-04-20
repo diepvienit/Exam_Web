@@ -29,9 +29,8 @@
         <table class="table table-bordered table-striped">
             <tr>
                 <th>STT</th>
-                <th>
-                    Câu hỏi
-                </th>
+                <th>Ảnh</th>
+                <th>Câu hỏi</th>
                 <th style="width: 40%">
                     Đáp án
                 </th>
@@ -51,6 +50,11 @@
             {
                 <tr>
                     <td>@stt</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.Image)) {
+                            <img src="@item.Image" width="50" />
+                        }
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.NoiDungCauHoi)
                     </td>
