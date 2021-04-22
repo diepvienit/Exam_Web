@@ -13,6 +13,7 @@ namespace Exam_Web_MVC.Models
         {
             LanThis = new HashSet<LanThi>();
             CauHois = new HashSet<CauHoi>();
+            DateCreate = DateTime.Now;
         }
 
         public int DeThiID { get; set; }
@@ -35,6 +36,8 @@ namespace Exam_Web_MVC.Models
 
         [StringLength(255)]
         public string Comment { get; set; }
+
+        public DateTime DateCreate { get; set; }
 
         public virtual GiaoVien GiaoVien { get; set; }
 

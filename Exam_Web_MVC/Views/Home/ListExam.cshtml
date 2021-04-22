@@ -3,6 +3,63 @@
     ViewBag.Title = ViewBag.MonHoc.TenMH;
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
+
+<style type="text/css">
+    .text-primary {
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .bai-thi-item {
+        border-bottom: 1px solid #ccc;
+        margin: 10px;
+        padding: 10px 0;
+    }
+
+    .card-body .bai-thi-item:last-child {
+        border: none;
+    }
+
+    .exam-title-home {
+        color: #222;
+        font-size: 15px;
+    }
+
+    .bai-thi-item .mr-3 {
+        font-size: 12px;
+        color: #777;
+    }
+
+    .bai-thi-item .mr-3 svg {
+        margin-right: 5px;
+    }
+
+    .lam-bai {
+        font-size: 14px;
+        color: #4caf50;
+        border: 1px solid #4caf50;
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 2px #ccc;
+        display: block;
+        float: right;
+        margin-top: -30px;
+    }
+
+    .lam-bai svg {
+        margin-right: 5px;
+    }
+
+    .panel-body {
+        padding: 0 15px;
+    }
+
+    .card{
+        border: none;
+    }
+</style>
+
 <div class="card">
     <div class="card-header">
         <h2>@ViewBag.MonHoc.TenMH</h2>
@@ -10,17 +67,8 @@
     <div class="card-body">
         @foreach (var item in ViewBag.DeThi)
         {
-            <div class="box-header ">
-                <div class="col-12 p-1 d-flex">
-                    <div class="col-9 col-md-10 p-1 pull-left fz-4">
-                        <a class="text-dark" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})" style="font-size: 22px"> @item.TenDeThi </a>
-                    </div>
-                    <div class="col-3 col-md-2 p-1 pull-right text-right">
-                        <span class="pb-0">
-                            <a class="btn btn-primary rounded-pill" style="font-size: 18px;" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> Làm bài </a> &nbsp;
-                        </span>
-                    </div>
-                </div>
+            <div class="bai-thi-item">
+                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
                 <div class="d-flex mt-3">
                     <div class="mr-3 p-1">
                         <i class="fa fa-book" aria-hidden="true"></i>
@@ -35,8 +83,8 @@
                         <span>@item.LoaiDe</span>
                     </div>
                 </div>
+                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
             </div>
-            <hr style="border: 2px solid #00C0EF; border-radius: 2px;" />
         }
     </div>
 </div>

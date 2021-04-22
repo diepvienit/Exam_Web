@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Exam_Web_MVC.Controllers
 {
-    public class ExamController : Controller
+    public class ExamController : BaseController
     {
         private static Exam_WebEntities _context = new Exam_WebEntities();
         DeThiRepository deThiRepository = new DeThiRepository(_context);

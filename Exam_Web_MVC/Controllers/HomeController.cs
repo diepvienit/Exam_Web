@@ -8,12 +8,16 @@ using Exam_Web_MVC.Models;
 
 namespace Exam_Web_MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly PortalContext db = new PortalContext();
         // GET: Home
         public ActionResult Index()
         {
+            if (!CheckLogin())
+            {
+                return Redirect("/Home/Login");
+            }
             return View(db.DeThis.OrderByDescending(x => x.DeThiID).ToList());
         }
 
@@ -85,6 +89,10 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult ListExam(int id)
         {
+            if (!CheckLogin())
+            {
+                return Redirect("/Home/Login");
+            }
             var listDeThiDetail = (from ad in db.DeThis
                                    where ad.MonHocID == id
                                    select new DeThiDetail_Model()
@@ -112,9 +120,14 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult UserDetail()
         {
+            if (!CheckLogin())
+            {
+                return Redirect("/Home/Login");
+            }
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
             UserDetail_Model model = new UserDetail_Model();
-            var hocSinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == (int)Session["TaiKhoanID_session"]);
-            var taiKhoan = db.TaiKhoans.FirstOrDefault(x => x.TaiKhoanID == (int)Session["TaiKhoanID_session"]);
+            var hocSinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == userId);
+            var taiKhoan = db.TaiKhoans.FirstOrDefault(x => x.TaiKhoanID == userId);
 
             model.HocSinhID = hocSinh.HocSinhID;
             model.TenHS = hocSinh.TenHS;
@@ -151,6 +164,10 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult ChangePassword()
         {
+            if (!CheckLogin())
+            {
+                return Redirect("/Home/Login");
+            }
             return View();
         }
 
@@ -177,6 +194,10 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult Contact()
         {
+            if (!CheckLogin())
+            {
+                return Redirect("/Home/Login");
+            }
             return View();
         }
 
@@ -205,6 +226,10 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult ListResult()
         {
+            if (!CheckLogin())
+            {
+                return Redirect("/Home/Login");
+            }
             int.TryParse(Session["TaiKhoanID_session"].ToString(), out int taiKhoanId);
             var hocSinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == taiKhoanId);
 
@@ -229,6 +254,17 @@ namespace Exam_Web_MVC.Controllers
                 listResults.Add(model);
             }
             return View(listResults);
+        }
+
+        public bool CheckLogin()
+        {
+            if (Session["TaiKhoanID_session"] == null || string.IsNullOrEmpty(Session["TaiKhoanID_session"].ToString())
+                || Session["UserName"] == null || string.IsNullOrEmpty(Session["UserName"].ToString()))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

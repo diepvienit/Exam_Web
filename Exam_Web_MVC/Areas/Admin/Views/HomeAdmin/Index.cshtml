@@ -1,10 +1,139 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Quản trị";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div style="background-image:url('../../../../Assets/Admin/images/admin_home.jpg'); height:730px;" class="text-center">
-    <div style="font-size:40px; font-weight:700; padding-top:23%;">ADMINISTRATOR</div>
-</div>
+<style type="text/css">
+    .menu-home {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 840px;
+        width: 100%;
+    }
 
+    .menu-home .home-item {
+        width: 200px;
+        text-align: center;
+        padding: 20px 10px;
+        margin: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .menu-home .home-item:hover {
+        box-shadow: 0 0 5px #ccc;
+    }
+
+    .menu-home .home-item a svg {
+        font-size: 80px;
+        color: #999;
+    }
+
+    .home-title-menu {
+        font-size: 20px;
+        line-height: 60px;
+        font-weight: 500;
+        color: #888;
+        margin-top: 10px;
+        display: block;
+    }
+
+    .badge {
+        float: right;
+        border-radius: 30px;
+        padding: 5px 10px;
+        background-color: #999;
+        color: #fff;
+    }
+
+    .head-noti {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9 col-sm-8 col-xs-12" style="height: calc(100vh - 90px)">
+            <div class="menu-home">
+                <div class="home-item">
+                    <div>
+                        <a href="/Admin/GiaoVienManagement">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </a>
+                    </div>
+                    <a class="home-title-menu" href="/Admin/GiaoVienManagement">Giáo viên</a>
+                </div>
+                <div class="home-item">
+                    <div>
+                        <a href="/Admin/HocSinhManagement">
+                            <i class="fas fa-user-graduate"></i>
+                        </a>
+                    </div>
+                    <a class="home-title-menu" href="/Admin/HocSinhManagement">Học sinh</a>
+                </div>
+                <div class="home-item">
+                    <div>
+                        <a href="/Admin/CauHoiManagement">
+                            <i class="far fa-question-circle"></i>
+                        </a>
+                    </div>
+                    <a class="home-title-menu" href="/Admin/CauHoiManagement">Câu hỏi</a>
+                </div>
+                <div class="home-item">
+                    <div>
+                        <a href="/Admin/DeThiManagement">
+                            <i class="far fa-sticky-note"></i>
+                        </a>
+                    </div>
+                    <a class="home-title-menu" href="/Admin/DeThiManagement">Đề thi</a>
+                </div>
+                <div class="home-item">
+                    <div>
+                        <a href="/Admin/MonHocManagement">
+                            <i class="fas fa-book"></i>
+                        </a>
+                    </div>
+                    <a class="home-title-menu" href="/Admin/MonHocManagement">Đề thi</a>
+                </div>
+                <div class="home-item">
+                    <div>
+                        <a href="/Admin/Contact">
+                            <i class="fas fa-book"></i>
+                        </a>
+                    </div>
+                    <a class="home-title-menu" href="/Admin/Contact">Đề thi</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-12">
+            <header class="head-noti">Thông báo</header>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="badge">@ViewBag.countBaiThiToDay</span>
+                    Bài thi hôm nay
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">@ViewBag.countBaiThi</span>
+                    Bài thi
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">@ViewBag.countGiaoVien</span>
+                    Giáo viên
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">@ViewBag.countHocSinh</span>
+                    Học sinh
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
