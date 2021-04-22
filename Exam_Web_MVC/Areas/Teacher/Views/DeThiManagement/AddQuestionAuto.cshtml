@@ -8,11 +8,11 @@
         <h2>Thêm Câu Hỏi Cho Đề "@ViewBag.TenDeThi"</h2>
         @Html.ActionLink("Quay lại", "Details", new { id = ViewBag.id }, new { @class = "btn btn-secondary rounded-pill btn-comeback" })
     </div>
-    <div class="box-action">
-        <input type="submit" class="btn btn-primary" value="Thêm Câu Hỏi" />
-    </div>
-    <div class="card-body">
-        <form method="post">
+    <form method="post">
+        <div class="box-action">
+            <input type="submit" class="btn btn-primary" value="Thêm Câu Hỏi" />
+        </div>
+        <div class="card-body">
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Số Câu Dễ:</label>
                 <div class="col-sm-10">
@@ -37,7 +37,7 @@
                     <input class="form-control" type="number" name="SoCauRatKho" />
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
