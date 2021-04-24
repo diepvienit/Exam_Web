@@ -50,6 +50,7 @@ namespace Exam_Web_MVC.Models
         public int? HocViID { get; set; }
         public string HocVi { get; set; }
         public string MonHoc { get; set; }
+        public string UserName { get; set; }
     }
 
     public partial class HocSinhEntity
@@ -60,6 +61,7 @@ namespace Exam_Web_MVC.Models
         public DateTime? NgaySinh { get; set; }
         public bool? GioiTinh { get; set; }
         public string Email { get; set; }
+        public string UserName { get; set; }
         public string KetQua { get; set; }
         public int? ThoiGianLamBai { get; set; }
         public DateTime? ThoiGianNopBai { get; set; }
@@ -130,5 +132,23 @@ namespace Exam_Web_MVC.Models
         public string PhanHoi { get; set; }
         public DateTime? NgayGui { get; set; }
         public int HocSinhID { get; set; }
+    }
+
+    public class GiaoVien_TaiKhoan_Model
+    {
+        //GiaoVien
+        public int GiaoVienID { get; set; }
+        public Nullable<int> TaiKhoanID { get; set; }
+        public string TenGV { get; set; }
+        public Nullable<System.DateTime> NgaySinh { get; set; }
+        public Nullable<bool> GioiTinh { get; set; }
+        public string Email { get; set; }
+        public Nullable<int> MonHocID { get; set; }
+        public Nullable<int> HocViID { get; set; }
+
+        //TaiKhoan
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Role { get; set; }
     }
 }
