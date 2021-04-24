@@ -23,7 +23,7 @@ namespace Exam_Web_MVC.Models
 
         public int? LanThiSo { get; set; }
 
-        public double? KetQuaThi { get; set; }
+        public decimal? KetQuaThi { get; set; }
 
         public int? ThoiGianLamBai { get; set; }
 
@@ -33,6 +33,8 @@ namespace Exam_Web_MVC.Models
         public virtual ICollection<DapAnDaLuaChon> DapAnDaLuaChons { get; set; }
 
         public virtual DeThi DeThi { get; set; }
+        
+
 
         public virtual HocSinh HocSinh { get; set; }
     }

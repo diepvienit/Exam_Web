@@ -67,24 +67,36 @@
     <div class="card-body">
         @foreach (var item in ViewBag.DeThi)
         {
-            <div class="bai-thi-item">
-                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                <div class="d-flex mt-3">
-                    <div class="mr-3 p-1">
-                        <i class="fa fa-book" aria-hidden="true"></i>
-                        <span>@item.NumberQuestion Câu Hỏi </span>
-                    </div>
-                    <div class="mr-3 p-1">
-                        <i class="far fa-clock" aria-hidden="true"></i>
-                        <span>@item.ThoiGianLamBai Phút</span>
-                    </div>
-                    <div class="mr-3 p-1">
-                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                        <span>@item.LoaiDe</span>
-                    </div>
+        <div class="bai-thi-item">
+            <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
+            <div class="d-flex mt-3">
+                <div class="mr-3 p-1">
+                    <i class="fa fa-book" aria-hidden="true"></i>
+                    <span>@item.NumberQuestion Câu Hỏi </span>
                 </div>
-                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
+                <div class="mr-3 p-1">
+                    <i class="far fa-clock" aria-hidden="true"></i>
+                    <span>@item.ThoiGianLamBai Phút</span>
+                </div>
+                <div class="mr-3 p-1">
+                    <i class="far fa-file-alt" aria-hidden="true"></i>
+                    <span>@item.LoaiDe</span>
+                </div>
+                <div class="mr-3 p-1">
+                    <i class="far fa-file-alt" aria-hidden="true"></i>
+                    <span>@item.ThoiGianBatDauLamBai</span>
+                </div>
             </div>
+
+            @if (DateTime.Compare( @item.ThoiGianBatDauLamBai , DateTime.Now) < 0)
+            {
+                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
+            }
+            else
+            {
+                <a class="lam-bai" href="#"><i class="fas fa-book-reader"></i> Làm bài </a>
+            }
+        </div>
         }
     </div>
 </div>

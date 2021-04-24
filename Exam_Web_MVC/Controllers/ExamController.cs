@@ -98,8 +98,8 @@ namespace Exam_Web_MVC.Controllers
             HocSinh hocSinh = hocSinhRepository.GetById(hocSinhID);
             ViewBag.TenHocSinh = hocSinh.TenHS;
             ViewBag.TenDe = deThiRepository.GetById((int)lanThi.DeThiID).TenDeThi;
-            double diem = (double)NumberCorrectAnser*10 / deThiRepository.CountQuestionByMaDeThi((int)lanThi.DeThiID);
-            diem = (double)Math.Round(diem, 2);
+            decimal diem = (decimal)NumberCorrectAnser*10 / deThiRepository.CountQuestionByMaDeThi((int)lanThi.DeThiID);
+            diem = (decimal)Math.Round(diem, 2);
             ViewBag.SoCauDung = NumberCorrectAnser;
             ViewBag.TongSoCau = deThiRepository.CountQuestionByMaDeThi((int)lanThi.DeThiID);
             ViewBag.Diem = diem;

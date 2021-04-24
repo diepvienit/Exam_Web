@@ -24,7 +24,7 @@ namespace Exam_Web_Core
         public Nullable<int> HocSinhID { get; set; }
         public Nullable<int> DeThiID { get; set; }
         public Nullable<int> LanThiSo { get; set; }
-        public Nullable<double> KetQuaThi { get; set; }
+        public Nullable<decimal> KetQuaThi { get; set; }
         public Nullable<int> ThoiGianLamBai { get; set; }
         public Nullable<System.DateTime> ThoiGianNopBai { get; set; }
     

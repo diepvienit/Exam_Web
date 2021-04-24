@@ -250,7 +250,7 @@ namespace Exam_Web_MVC.Controllers
                 model.LanThi = (int)listLanThi[i].LanThiSo;
                 model.ThoiGianLamBai = listLanThi[i].ThoiGianLamBai.ToString();
                 model.ThoiGianNopBai = listLanThi[i].ThoiGianNopBai.ToString();
-                model.Diem = (double)listLanThi[i].KetQuaThi;
+                model.Diem =(double)listLanThi[i].KetQuaThi;
                 listResults.Add(model);
             }
             return View(listResults);
