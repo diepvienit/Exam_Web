@@ -18,7 +18,7 @@ namespace Exam_Web_MVC.Controllers
             {
                 return Redirect("/Home/Login");
             }
-            return View(db.DeThis.OrderByDescending(x => x.DeThiID).ToList());
+            return View(db.DeThis.OrderByDescending(x => x.DeThiID).Where(x=>x.Status == 2).ToList());
         }
 
         public ActionResult Login()
@@ -94,7 +94,7 @@ namespace Exam_Web_MVC.Controllers
                 return Redirect("/Home/Login");
             }
             var listDeThiDetail = (from ad in db.DeThis
-                                   where ad.MonHocID == id
+                                   where ad.MonHocID == id && ad.Status == 2
                                    select new DeThiDetail_Model()
                                    {
                                        DeThiID = ad.DeThiID,
