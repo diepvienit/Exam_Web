@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Exam_Web_MVC/Web.Release.config
+Exam_Web_MVC/Web.Debug.config
+Exam_Web_MVC/Web.config
