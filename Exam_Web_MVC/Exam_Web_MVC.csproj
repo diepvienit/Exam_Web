@@ -173,9 +173,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Admin\css\styles.css" />
-    <Content Include="Assets\Admin\images\admin_home.jpg" />
-    <Content Include="Assets\Admin\images\home_user.jpg" />
+    <Content Include="Assets\Admin\images\background-item.jpg" />
+    <Content Include="Assets\Admin\images\câu hỏi.jpg" />
     <Content Include="Assets\Admin\images\login_background.jpg" />
+    <Content Include="Assets\Admin\images\đề thi.jpg" />
     <Content Include="Assets\Admin\scripts\scripts.js" />
     <Content Include="Assets\User\gif\flash_new.gif" />
     <Content Include="Assets\User\scripts\timer_count_down.js" />

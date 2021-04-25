@@ -94,7 +94,7 @@
           <Property Name="HocSinhID" Type="int" />
           <Property Name="DeThiID" Type="int" />
           <Property Name="LanThiSo" Type="int" />
-          <Property Name="KetQuaThi" Type="float" />
+          <Property Name="KetQuaThi" Type="decimal" />
           <Property Name="ThoiGianLamBai" Type="int" />
           <Property Name="ThoiGianNopBai" Type="datetime" />
         </EntityType>
@@ -517,7 +517,7 @@
           <Property Name="HocSinhID" Type="Int32" />
           <Property Name="DeThiID" Type="Int32" />
           <Property Name="LanThiSo" Type="Int32" />
-          <Property Name="KetQuaThi" Type="Double" />
+          <Property Name="KetQuaThi" Type="Decimal" />
           <Property Name="ThoiGianLamBai" Type="Int32" />
           <Property Name="ThoiGianNopBai" Type="DateTime" Precision="3" />
           <NavigationProperty Name="DapAnDaLuaChons" Relationship="Self.FK_DapAnDaLuaChon_LanThi" FromRole="LanThi" ToRole="DapAnDaLuaChon" />

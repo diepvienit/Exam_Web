@@ -210,7 +210,7 @@
         });
 
         $('#btnReviewTrue').click(function () {
-            $.post("/Admin/DeThiManagement/ReviewExamTrue", { id: @ViewBag.id}, function (data) {
+            $.post("/Admin/DeThiManagement/ReviewTrue", { id: @ViewBag.id}, function (data) {
                 if (data.success == true) {
                     location.reload();
                 } else {

@@ -1,1 +1,13 @@
-﻿
+﻿.table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #428bca;
+    color: white;
+    text-align: center;
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td {
+    background: white;
+}
+
+tr td img {
+    width: 100%;
+}

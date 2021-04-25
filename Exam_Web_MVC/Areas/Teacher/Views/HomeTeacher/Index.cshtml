@@ -3,7 +3,58 @@
     ViewBag.Title = "Index";
     Layout = "~/Areas/Teacher/Views/Shared/_TeacherLayout.cshtml";
 }
+<style>
+    .menu-home {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-35%, -50%);
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 840px;
+        width: 100%;
+    }
+       .menu-home .home-item {
+            width: 200px;
+            text-align: center;
+            padding: 20px 10px;
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    .home-title-menu {
+        font-size: 20px;
+        line-height: 60px;
+        font-weight: 500;
+        color: #888;
+        margin-top: 10px;
+        display: block;
+    }
+    .img-item img{
+        width:130px;
+        height: 130px;
+    }
+</style>
+<div >
+    <div class="menu-home">
 
-<div style="background-image:url('../../../../Assets/Admin/images/admin_home.jpg'); height:730px;" class="text-center">
-    <div style="font-size:40px; font-weight:700; padding-top:23%;">TEACHER</div>
+        <div class="home-item">
+            <div class="img-item">
+                <a href="/Teacher/CauHoiManagement">
+                    <img src="~/Assets/Admin/images/câu hỏi.jpg" />
+                </a>
+            </div>
+            <a class="home-title-menu" href="/Teacher/CauHoiManagement">Câu Hỏi</a>
+        </div>
+        <div class="home-item">
+            <div class="img-item">
+                <a href="/Teacher/DeThiManagement">
+                   <img src="~/Assets/Admin/images/đề thi.jpg"/> 
+                </a>
+            </div>
+            <a class="home-title-menu" href="/Teacher/DeThiManagement">Đề Thi</a>
+        </div>
+
+    </div>
+
 </div>
