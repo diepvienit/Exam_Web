@@ -1,5 +1,4 @@
-﻿@using Exam_Web_Core.ViewModels
-@model DoExam_Model
+﻿@model Exam_Web_MVC.Models.DoExam_Model
 @{
     ViewBag.Title = "DoExam";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
@@ -103,7 +102,7 @@
     <div class="card-body">
         <form method="post" action="@Url.Action("DoExam")">
             @Html.HiddenFor(model => model.DeThiID)
-            <input type="hidden" id="timePast" name="TimePast"/>
+            <input type="hidden" id="timePast" name="TimePast" />
 
             @for (int i = 0; i < Model.Questions.Count(); i++)
             {
@@ -119,9 +118,9 @@
                             </div>
                         </div>
                         @*<input type="hidden" name="_causo" id="_causo" value="1">
-                    <input type="hidden" name="_causo_id" id="_causo_id" value="3692">
-                    <input type="hidden" name="_currentpage" value="1">
-                    <input type="hidden" name="_totalpages" value="10">*@
+                            <input type="hidden" name="_causo_id" id="_causo_id" value="3692">
+                            <input type="hidden" name="_currentpage" value="1">
+                            <input type="hidden" name="_totalpages" value="10">*@
 
                         <div class="box-body p-1">
 

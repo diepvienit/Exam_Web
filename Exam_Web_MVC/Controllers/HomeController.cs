@@ -239,32 +239,24 @@ namespace Exam_Web_MVC.Controllers
             }
 
             ViewBag.TenHS = hocSinh.TenHS;
-            List<ListResult_Model> listResults = new List<ListResult_Model>();
-            List<LanThi> listLanThi = db.LanThis.Where(x => x.HocSinhID == hocSinh.HocSinhID).ToList();
+            var listResults = new List<ListResult_Model>();
+            var listLanThi = db.LanThis.Where(x => x.HocSinhID == hocSinh.HocSinhID).ToList();
+
             for (int i = 0; i < listLanThi.Count(); i++)
             {
-                ListResult_Model model = new ListResult_Model();
-                model.MonHoc = listLanThi[i].DeThi.MonHoc.TenMH;
-                model.TenDeThi = listLanThi[i].DeThi.TenDeThi;
-                model.LoaiDe = listLanThi[i].DeThi.LoaiDe;
-                model.LanThi = (int)listLanThi[i].LanThiSo;
-                model.ThoiGianLamBai = listLanThi[i].ThoiGianLamBai.ToString();
-                model.ThoiGianNopBai = listLanThi[i].ThoiGianNopBai.ToString();
-                model.Diem =(double)listLanThi[i].KetQuaThi;
+                var model = new ListResult_Model
+                {
+                    MonHoc = listLanThi[i].DeThi.MonHoc.TenMH,
+                    TenDeThi = listLanThi[i].DeThi.TenDeThi,
+                    LoaiDe = listLanThi[i].DeThi.LoaiDe,
+                    LanThi = (int)listLanThi[i].LanThiSo,
+                    ThoiGianLamBai = listLanThi[i].ThoiGianLamBai.ToString(),
+                    ThoiGianNopBai = listLanThi[i].ThoiGianNopBai.ToString(),
+                    Diem = listLanThi[i].KetQuaThi ?? 0
+                };
                 listResults.Add(model);
             }
             return View(listResults);
-        }
-
-        public bool CheckLogin()
-        {
-            if (Session["TaiKhoanID_session"] == null || string.IsNullOrEmpty(Session["TaiKhoanID_session"].ToString())
-                || Session["UserName"] == null || string.IsNullOrEmpty(Session["UserName"].ToString()))
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

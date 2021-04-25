@@ -151,4 +151,28 @@ namespace Exam_Web_MVC.Models
         public string Password { get; set; }
         public string Role { get; set; }
     }
+
+    public class Question_Model
+    {
+        public int CauHoiID { get; set; }
+        public string NoiDungCauHoi { get; set; }
+        public string Answer_A { get; set; }
+        public string Answer_B { get; set; }
+        public string Answer_C { get; set; }
+        public string Answer_D { get; set; }
+        public string CauTraLoiDung { get; set; }
+        public string DoKho { get; set; }
+        public string SelectedAnswer { get; set; }
+    }
+
+    public class DoExam_Model
+    {
+        public int DeThiID { get; set; }
+        public int TimePast { get; set; }
+        public List<Question_Model> Questions { get; set; }
+        public DoExam_Model()
+        {
+            Questions = new List<Question_Model>();
+        }
+    }
 }

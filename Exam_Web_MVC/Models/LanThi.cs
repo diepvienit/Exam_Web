@@ -9,7 +9,6 @@ namespace Exam_Web_MVC.Models
     [Table("LanThi")]
     public partial class LanThi
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public LanThi()
         {
             DapAnDaLuaChons = new HashSet<DapAnDaLuaChon>();
@@ -23,19 +22,16 @@ namespace Exam_Web_MVC.Models
 
         public int? LanThiSo { get; set; }
 
-        public decimal? KetQuaThi { get; set; }
+        public double? KetQuaThi { get; set; }
 
         public int? ThoiGianLamBai { get; set; }
 
         public DateTime? ThoiGianNopBai { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DapAnDaLuaChon> DapAnDaLuaChons { get; set; }
 
         public virtual DeThi DeThi { get; set; }
         
-
-
         public virtual HocSinh HocSinh { get; set; }
     }
 }
