@@ -1,14 +1,13 @@
-﻿@using Exam_Web_Core.ViewModels
-@model HocSinh_TaiKhoan_Model
+﻿@model Exam_Web_MVC.Models.HocSinh_TaiKhoan_Model
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Cập nhật học sinh";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="card">
     <div class="card-header">
-        <h2>Sửa Học Sinh</h2>
+        <h2>@ViewBag.Title</h2>
     </div>
     <div class="card-body">
         @using (Html.BeginForm())
@@ -17,31 +16,22 @@
 
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
             @Html.HiddenFor(model => model.HocSinhID)
-            @Html.HiddenFor(model=>model.TaiKhoanID)
+            @Html.HiddenFor(model => model.TaiKhoanID)
+
             <div class="form-group">
                 <div class="control-label col-md-2">Tên đăng nhập</div>
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 <div class="control-label col-md-2">Mật khẩu</div>
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label col-md-2">Quyền</div>
-                <div class="col-md-10">
-                    <select class="form-control" name="Role">
-                        <option value="admin">Quản trị viên</option>
-                        <option value="teacher">Giáo viên</option>
-                        <option value="student">Học sinh</option>
-                    </select>
-                    @*@Html.DropDownListFor(model => model.Role, Model.Role, "--Select--")*@
                 </div>
             </div>
             <div class="form-group">
@@ -83,10 +73,10 @@
                 </div>
             </div>
             @*<div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary" })
-                </div>
-            </div>*@
+            <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>*@
         </div>
         }
     </div>

@@ -6,33 +6,45 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Exam_Web_Core;
-using Exam_Web_Core.Repositories;
-using Exam_Web_Core.ViewModels;
+using Exam_Web_MVC.Models;
+using PagedList;
 
 namespace Exam_Web_MVC.Areas.Admin.Controllers
 {
     public class GiaoVienManagementController : Controller
     {
-        //private Exam_WebEntities db = new Exam_WebEntities();
-        private static Exam_WebEntities _context = new Exam_WebEntities();
-        GiaoVienRepository giaoVienRepository = new GiaoVienRepository(_context);
-        TaiKhoanRepository taiKhoanRepository = new TaiKhoanRepository(_context);
-        HocViRepository hocViRepository = new HocViRepository(_context);
-        MonHocRepository monHocRepository = new MonHocRepository(_context);
+        private readonly PortalContext db = new PortalContext();
 
         // GET: Admin/GiaoVienManagement
-        public ActionResult Index()
+        public ActionResult Index(int? page, string keysearch = "")
         {
-            return View(giaoVienRepository.GetAll());
+            ViewBag.keysearch = keysearch;
+
+            var models = (from ad in db.GiaoViens
+                          where string.IsNullOrEmpty(keysearch)
+                            || ad.TenGV.Contains(keysearch)
+                          select new GiaoVienEntity()
+                          {
+                              GiaoVienID = ad.GiaoVienID,
+                              TaiKhoanID = ad.TaiKhoanID,
+                              TenGV = ad.TenGV,
+                              NgaySinh = ad.NgaySinh,
+                              GioiTinh = ad.GioiTinh,
+                              Email = ad.Email,
+                              HocVi = ad.HocVi.TenHocVi,
+                              UserName = ad.TaiKhoan.UserName
+                          }).OrderByDescending(x => x.GiaoVienID).ToPagedList(page ?? 1, 15);
+
+            ViewBag.stt = (models.PageNumber - 1) * 15 + 1;
+
+            return View(models);
         }
 
         // GET: Admin/GiaoVienManagement/Create
         public ActionResult Create()
         {
-            ViewBag.HocViID = new SelectList(hocViRepository.GetAll(), "HocViID", "TenHocVi");
-            ViewBag.MonHocID = new SelectList(monHocRepository.GetAll(), "MonHocID", "TenMH");
-            ViewBag.TaiKhoanID = new SelectList(taiKhoanRepository.GetAll(), "TaiKhoanID", "UserName");
+            ViewBag.HocViID = new SelectList(db.HocVis, "HocViID", "TenHocVi");
+            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH");
             return View();
         }
 
@@ -45,28 +57,30 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                TaiKhoan taiKhoan = new TaiKhoan();
-                taiKhoan.UserName = viewModel.UserName;
-                taiKhoan.Password = viewModel.Password;
-                taiKhoan.Role = viewModel.Role;
-                taiKhoanRepository.Add(taiKhoan);
+                var taiKhoan = new TaiKhoan
+                {
+                    UserName = viewModel.UserName,
+                    Password = viewModel.Password,
+                    Role = "teacher"
+                };
 
-                GiaoVien giaoVien = new GiaoVien();
-                giaoVien.TaiKhoanID = taiKhoanRepository.GetByUsername(taiKhoan.UserName).TaiKhoanID;
-                giaoVien.TenGV = viewModel.TenGV;
-                giaoVien.NgaySinh = viewModel.NgaySinh;
-                giaoVien.GioiTinh = viewModel.GioiTinh;
-                giaoVien.Email = viewModel.Email;
-                giaoVien.MonHocID = viewModel.MonHocID;
-                giaoVien.HocViID = viewModel.HocViID;
-                giaoVienRepository.Add(giaoVien);
+                var giaoVien = new GiaoVien
+                {
+                    TenGV = viewModel.TenGV,
+                    NgaySinh = viewModel.NgaySinh,
+                    GioiTinh = viewModel.GioiTinh,
+                    Email = viewModel.Email,
+                    MonHocID = viewModel.MonHocID,
+                    HocViID = viewModel.HocViID
+                };
+                taiKhoan.GiaoViens.Add(giaoVien);
+
+                db.TaiKhoans.Add(taiKhoan);
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
-            //ViewBag.HocViID = new SelectList(db.HocVis, "HocViID", "TenHocVi", giaoVien.HocViID);
-            //ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", giaoVien.MonHocID);
-            //ViewBag.TaiKhoanID = new SelectList(db.TaiKhoans, "TaiKhoanID", "UserName", giaoVien.TaiKhoanID);
-            //return View(giaoVien);
             return View();
         }
 
@@ -74,8 +88,9 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         public ActionResult Edit(int id)
         {
             GiaoVien_TaiKhoan_Model viewModel = new GiaoVien_TaiKhoan_Model();
-            GiaoVien giaoVien = giaoVienRepository.GetById(id);
-            TaiKhoan taiKhoan = taiKhoanRepository.GetById((int)giaoVien.TaiKhoanID);
+
+            var giaoVien = db.GiaoViens.Find(id);
+
             viewModel.GiaoVienID = giaoVien.GiaoVienID;
             viewModel.TaiKhoanID = giaoVien.TaiKhoanID;
             viewModel.TenGV = giaoVien.TenGV;
@@ -85,12 +100,16 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
             viewModel.MonHocID = giaoVien.MonHocID;
             viewModel.HocViID = giaoVien.HocViID;
 
-            viewModel.UserName = taiKhoan.UserName;
-            viewModel.Password = taiKhoan.Password;
-            viewModel.Role = taiKhoan.Role;
-            ViewBag.HocViID = new SelectList(hocViRepository.GetAll(), "HocViID", "TenHocVi", giaoVien.HocViID);
-            ViewBag.MonHocID = new SelectList(monHocRepository.GetAll(), "MonHocID", "TenMH", giaoVien.MonHocID);
-            //ViewBag.TaiKhoanID = new SelectList(taiKhoanRepository.GetAll(), "TaiKhoanID", "UserName", viewModel.giaoVien.TaiKhoanID);
+            if (giaoVien.TaiKhoanID != null)
+            {
+                var taiKhoan = db.TaiKhoans.Find(giaoVien.TaiKhoanID);
+
+                viewModel.UserName = taiKhoan.UserName;
+                viewModel.Role = taiKhoan.Role;
+            }
+            ViewBag.HocViID = new SelectList(db.HocVis, "HocViID", "TenHocVi", giaoVien.HocViID);
+            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", giaoVien.MonHocID);
+
             return View(viewModel);
         }
 
@@ -99,44 +118,49 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(GiaoVien_TaiKhoan_Model viewModel)
+        public ActionResult Edit(GiaoVien_TaiKhoan_Model model)
         {
             if (ModelState.IsValid)
             {
-                TaiKhoan taiKhoan = new TaiKhoan();
-                taiKhoan.UserName = viewModel.UserName;
-                taiKhoan.Password = viewModel.Password;
-                taiKhoan.Role = viewModel.Role;
-                taiKhoan.TaiKhoanID = (int)viewModel.TaiKhoanID;
-                taiKhoanRepository.Update(taiKhoan);
-                var taiKhoan_updated = taiKhoanRepository.GetByUsername(viewModel.UserName);
+                if (model.TaiKhoanID != null && !string.IsNullOrEmpty(model.Password))
+                {
+                    var taikhoan = db.TaiKhoans.Find(model.TaiKhoanID);
 
-                GiaoVien giaoVien = new GiaoVien();
-                giaoVien.GiaoVienID = viewModel.GiaoVienID;
-                giaoVien.TaiKhoanID = taiKhoan_updated.TaiKhoanID;
-                giaoVien.TenGV = viewModel.TenGV;
-                giaoVien.NgaySinh = viewModel.NgaySinh;
-                giaoVien.GioiTinh = viewModel.GioiTinh;
-                giaoVien.Email = viewModel.Email;
-                giaoVien.MonHocID = viewModel.MonHocID;
-                giaoVien.HocViID = viewModel.HocViID;
-                giaoVienRepository.Update(giaoVien);
+                    taikhoan.Password = model.Password;
+                    db.Entry(taikhoan).State = EntityState.Modified;
+                }
+
+                var giaoVien = db.GiaoViens.Find(model.GiaoVienID);
+                giaoVien.TenGV = model.TenGV;
+                giaoVien.NgaySinh = model.NgaySinh;
+                giaoVien.GioiTinh = model.GioiTinh;
+                giaoVien.Email = model.Email;
+                giaoVien.MonHocID = model.MonHocID;
+                giaoVien.HocViID = model.HocViID;
+
+                db.Entry(giaoVien).State = EntityState.Modified;
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            //ViewBag.HocViID = new SelectList(db.HocVis, "HocViID", "TenHocVi", giaoVien.HocViID);
-            //ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", giaoVien.MonHocID);
-            //ViewBag.TaiKhoanID = new SelectList(db.TaiKhoans, "TaiKhoanID", "UserName", giaoVien.TaiKhoanID);
-            //return View(giaoVien);
-            return RedirectToAction("Index");
+
+            return View(model);
         }
 
         // GET: Admin/GiaoVienManagement/Delete/5
         public ActionResult Delete(int id)
         {
-            GiaoVien delete_GiaoVien = giaoVienRepository.GetById(id);
-            TaiKhoan delete_TaiKhoan = taiKhoanRepository.GetById((int)delete_GiaoVien.TaiKhoanID);
-            giaoVienRepository.Delete(delete_GiaoVien);
-            taiKhoanRepository.Delete(delete_TaiKhoan);
+
+            var giaovien = db.GiaoViens.Find(id);
+            if (giaovien.TaiKhoanID != null)
+            {
+                var taiKhoan = db.TaiKhoans.Find(giaovien.TaiKhoanID);
+                db.TaiKhoans.Remove(taiKhoan);
+            }
+
+            db.GiaoViens.Remove(giaovien);
+            db.SaveChanges();
+
             return RedirectToAction("Index");
         }
     }

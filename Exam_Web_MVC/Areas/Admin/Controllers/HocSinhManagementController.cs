@@ -6,31 +6,44 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Exam_Web_Core;
-using Exam_Web_Core.Repositories;
 using Exam_Web_MVC.Models;
+using PagedList;
 
 namespace Exam_Web_MVC.Areas.Admin.Controllers
 {
     public class HocSinhManagementController : Controller
     {
-        private static Exam_WebEntities _context = new Exam_WebEntities();
         private readonly PortalContext db = new PortalContext();
-        private readonly HocSinhRepository hocSinhRepository = new HocSinhRepository(_context);
-        private readonly TaiKhoanRepository taiKhoanRepository = new TaiKhoanRepository(_context);
+
         // GET: Admin/HocSinhManagement
-        public ActionResult Index()
+        public ActionResult Index(int? page, string keysearch = "")
         {
+            ViewBag.keysearch = keysearch;
 
+            var models = (from ad in db.HocSinhs
+                          where string.IsNullOrEmpty(keysearch)
+                            || ad.TenHS.Contains(keysearch)
+                          select new HocSinhEntity()
+                          {
+                              HocSinhID = ad.HocSinhID,
+                              TaiKhoanID = ad.TaiKhoanID,
+                              TenHS = ad.TenHS,
+                              NgaySinh = ad.NgaySinh,
+                              GioiTinh = ad.GioiTinh,
+                              Email = ad.Email,
+                              UserName = ad.TaiKhoan.UserName
+                          }).OrderByDescending(x => x.HocSinhID).ToPagedList(page ?? 1, 15);
 
+            ViewBag.stt = (models.PageNumber - 1) * 15 + 1;
 
-            return View(db.HocSinhs.ToList());
-            //return View(_context.HocSinhs.ToList());
+            return View(models);
         }
 
         // GET: Admin/HocSinhManagement/Create
         public ActionResult Create()
         {
+            ViewBag.TaiKhoanID = new SelectList(db.TaiKhoans.Where(x => x.HocSinhs.Count > 0 && x.GiaoViens.Count > 0), "TaiKhoanID", "UserName");
+
             return View();
         }
 
@@ -38,43 +51,41 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(HocSinh_TaiKhoan_Model viewModel)
+        public ActionResult Create(HocSinh_TaiKhoan_Model model)
         {
             if (ModelState.IsValid)
             {
-                Models.HocSinh hocSinh = new Models.HocSinh
+
+                var hocSinh = new HocSinh
                 {
-                    TenHS = viewModel.TenHS,
-                    NgaySinh = viewModel.NgaySinh,
-                    GioiTinh = viewModel.GioiTinh,
-                    Email = viewModel.Email
+                    TenHS = model.TenHS,
+                    NgaySinh = model.NgaySinh,
+                    GioiTinh = model.GioiTinh,
+                    Email = model.Email
                 };
 
-                Models.TaiKhoan taiKhoan = new Models.TaiKhoan
+                var taiKhoan = new TaiKhoan
                 {
-                    UserName = viewModel.UserName,
-                    Password = viewModel.Password,
-                    Role = viewModel.Role
+                    UserName = model.UserName,
+                    Password = model.Password,
+                    Role = "student"
                 };
                 taiKhoan.HocSinhs.Add(hocSinh);
-
                 db.TaiKhoans.Add(taiKhoan);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            //ViewBag.TaiKhoanID = new SelectList(db.TaiKhoans, "TaiKhoanID", "UserName", hocSinh.TaiKhoanID);
-            return View(viewModel);
+            return View(model);
         }
 
         // GET: Admin/HocSinhManagement/Edit/5
         public ActionResult Edit(int id)
         {
-            Exam_Web_Core.ViewModels.HocSinh_TaiKhoan_Model viewModel = new Exam_Web_Core.ViewModels.HocSinh_TaiKhoan_Model();
-            //HocSinh hocSinh = hocSinhRepository.GetById(id);
-            var hocSinh = hocSinhRepository.GetById(id);
+            var viewModel = new HocSinh_TaiKhoan_Model();
+
+            var hocSinh = db.HocSinhs.Find(id);
             viewModel.HocSinhID = id;
             viewModel.TaiKhoanID = hocSinh.TaiKhoanID;
             viewModel.TenHS = hocSinh.TenHS;
@@ -82,13 +93,14 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
             viewModel.GioiTinh = hocSinh.GioiTinh;
             viewModel.Email = hocSinh.Email;
 
-            if (hocSinh.TaiKhoanID!=null)
+            var taiKhoan = new TaiKhoan();
+            if (hocSinh.TaiKhoanID != null)
             {
-                var taiKhoan = taiKhoanRepository.GetById((int)hocSinh.TaiKhoanID);
+                taiKhoan = db.TaiKhoans.Find(hocSinh.TaiKhoanID);
                 viewModel.UserName = taiKhoan.UserName;
-                viewModel.Password = taiKhoan.Password;
                 viewModel.Role = taiKhoan.Role;
             }
+
             return View(viewModel);
         }
 
@@ -97,46 +109,46 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(HocSinh_TaiKhoan_Model viewModel)
+        public ActionResult Edit(HocSinh_TaiKhoan_Model model)
         {
             if (ModelState.IsValid)
             {
-                var taiKhoan = new Exam_Web_Core.TaiKhoan();
-                taiKhoan.TaiKhoanID = (int)viewModel.TaiKhoanID;
-                taiKhoan.UserName = viewModel.UserName;
-                taiKhoan.Password = viewModel.Password;
-                taiKhoan.Role = viewModel.Role;
-                taiKhoanRepository.Update(taiKhoan);
+                if(model.TaiKhoanID != null && !string.IsNullOrEmpty(model.Password))
+                {
+                    var taikhoan = db.TaiKhoans.Find(model.TaiKhoanID);
+                    taikhoan.Password = model.Password;
 
-                var hocSinh = new Exam_Web_Core.HocSinh();
-                hocSinh.HocSinhID = viewModel.HocSinhID;
-                hocSinh.TaiKhoanID = taiKhoan.TaiKhoanID;
-                hocSinh.TenHS = viewModel.TenHS;
-                hocSinh.NgaySinh = viewModel.NgaySinh;
-                hocSinh.GioiTinh = viewModel.GioiTinh;
-                hocSinh.Email = viewModel.Email;
-                hocSinhRepository.Update(hocSinh);
+                    db.Entry(taikhoan).State = EntityState.Modified;
+                }
+
+                var hocsinh = db.HocSinhs.Find(model.HocSinhID);
+                hocsinh.TenHS = model.TenHS;
+                hocsinh.NgaySinh = model.NgaySinh;
+                hocsinh.GioiTinh = model.GioiTinh;
+                hocsinh.Email = model.Email;
+
+                db.Entry(hocsinh).State = EntityState.Modified;
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             //ViewBag.TaiKhoanID = new SelectList(db.TaiKhoans, "TaiKhoanID", "UserName", viewModel.TaiKhoanID);
-            return View(viewModel);
+            return View(model);
         }
 
         // GET: Admin/HocSinhManagement/Delete/5
         public ActionResult Delete(int id)
         {
-            var hocSinh = hocSinhRepository.GetById(id);
-            if (hocSinh.TaiKhoanID!=null)
+            var hocSinh = db.HocSinhs.Find(id);
+            if (hocSinh.TaiKhoanID != null)
             {
-                var taiKhoan = taiKhoanRepository.GetById((int)hocSinh.TaiKhoanID);
-                hocSinhRepository.Delete(hocSinh);
-                taiKhoanRepository.Delete(taiKhoan);
+                var taiKhoan = db.TaiKhoans.Find(hocSinh.TaiKhoanID);
+                db.TaiKhoans.Remove(taiKhoan);
+            }
 
-            }
-            else
-            {
-                hocSinhRepository.Delete(hocSinh);
-            }
+            db.HocSinhs.Remove(hocSinh);
+            db.SaveChanges();
+
             return RedirectToAction("Index");
         }
     }
