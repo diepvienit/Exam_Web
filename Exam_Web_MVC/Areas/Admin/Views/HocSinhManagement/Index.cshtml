@@ -32,7 +32,16 @@
                     <td>@stt</td>
                     <td>@Html.DisplayFor(modelItem => item.TenHS)</td>
                     <td>@Html.DisplayFor(modelItem => item.NgaySinh)</td>
-                    <td>@Html.DisplayFor(modelItem => item.GioiTinh)</td>
+                    <td>
+                        @if (item.GioiTinh == true)
+                        {
+                            <span>Nam</span>
+                        }
+                        else
+                        {
+                            <span>Nữ</span>
+                        }
+                    </td>
                     <td>@Html.DisplayFor(modelItem => item.Email)</td>
                     <td>@Html.DisplayFor(modelItem => item.UserName)</td>
                     <td>
