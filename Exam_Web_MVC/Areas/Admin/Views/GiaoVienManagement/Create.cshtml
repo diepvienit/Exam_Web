@@ -75,10 +75,18 @@
             </div>
 
             <div class="form-group">
-                <div class="control-label col-md-2">Bộ môn giảng dạy</div>
+                <div class="control-label col-md-2">Bộ Môn Giảng Dạy</div>
                 <div class="col-md-10">
                     @Html.DropDownList("MonHocID", null, htmlAttributes: new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.MonHocID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2">Học vị</div>
+                <div class="col-md-10">
+                    @Html.DropDownList("HocViID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.HocViID, "", new { @class = "text-danger" })
                 </div>
             </div>
 
@@ -89,10 +97,10 @@
                 </div>
             </div>
             @*<div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary" })
-                </div>
-            </div>*@
+            <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>*@
         </div>
         }
 

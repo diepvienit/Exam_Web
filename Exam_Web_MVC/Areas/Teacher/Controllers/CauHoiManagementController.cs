@@ -27,6 +27,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
             var models = (from ad in db.CauHois
                           where string.IsNullOrEmpty(keysearch)
                             || ad.NoiDungCauHoi.Contains(keysearch)
+                            || ad.MonHoc.TenMH.Contains(keysearch)
                           select new CauHoiEntity()
                           {
                               CauHoiID = ad.CauHoiID,
@@ -127,7 +128,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
             return View(cauHoi);
         }
 
-        // GET: Admin/CauHoiManagement/Delete/5
+        // GET: Teacher/CauHoiManagement/Delete/5
         public ActionResult Delete(int id)
         {
             CauHoi entity = db.CauHois.Find(id);

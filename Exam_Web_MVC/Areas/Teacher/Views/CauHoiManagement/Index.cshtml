@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="box-action">
-        @using (Html.BeginForm("Index", "DeThiManagement", FormMethod.Get, new { @class = "form-inline margin-bottom", @role = "form" }))
+        @using (Html.BeginForm("Index", "CauHoiManagement", FormMethod.Get, new { @class = "form-inline margin-bottom", @role = "form" }))
         {
             @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
             @Html.TextBox("keysearch", null, new { @class = "form-control", @placeholder = "Tìm tên..." })

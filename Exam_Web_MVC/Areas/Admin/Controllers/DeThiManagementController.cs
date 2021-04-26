@@ -26,6 +26,7 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
             var models = (from ad in db.DeThis
                           where string.IsNullOrEmpty(keysearch)
                             || ad.TenDeThi.Contains(keysearch)
+                            || ad.MonHoc.TenMH.Contains(keysearch)
                           select new DeThiEntity()
                           {
                               DeThiID = ad.DeThiID,

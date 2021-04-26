@@ -286,7 +286,6 @@
     <Content Include="Areas\Admin\Views\DeThiManagement\Details.cshtml" />
     <Content Include="Areas\Admin\Views\DeThiManagement\Index.cshtml" />
     <Content Include="Areas\Admin\Views\HomeAdmin\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\CauHoiManagement\Search.cshtml" />
     <Content Include="Areas\Teacher\Views\web.config" />
     <Content Include="Areas\Teacher\Views\Shared\_TeacherLayout.cshtml" />
     <Content Include="Areas\Teacher\Views\DeThiManagement\Index.cshtml" />
