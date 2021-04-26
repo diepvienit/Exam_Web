@@ -44,7 +44,20 @@
                         @Html.DisplayFor(modelItem => item.ThoiGianBatDauLamBai)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.LoaiDe)
+                        @*@Html.DisplayFor(modelItem => item.LoaiDe)*@
+                        @{
+                            if (item.LoaiDe == "revision")
+                            {
+
+
+                                <span>Luyện tập</span>
+                            }
+                            else if (item.LoaiDe == "final test")
+                            {
+                                <span>Kiểm tra</span>
+
+                            }
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.GiaoVien)

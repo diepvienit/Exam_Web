@@ -21,7 +21,7 @@
     <div class="box-action">
         @using (Html.BeginForm("Index", "CauHoiManagement", FormMethod.Get, new { @class = "form-inline margin-bottom", @role = "form" }))
         {
-            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+            @*@Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })*@
             @Html.TextBox("keysearch", null, new { @class = "form-control", @placeholder = "Tìm tên..." })
             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
         }

@@ -195,25 +195,25 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         public ActionResult AddQuestionAuto(int dethiid, int SoCauDe, int SoCauTrungBinh, int SoCauKho, int SoCauRatKho)
         {
             DeThi deThi = db.DeThis.Find(dethiid);
-            var listCauDe = db.CauHois.Where(x => x.DoKhoID == 1).OrderBy(x => Guid.NewGuid()).Take(SoCauDe);
+            var listCauDe = db.CauHois.Where(x => x.DoKhoID == 1 && x.MonHocID==deThi.MonHocID).OrderBy(x => Guid.NewGuid()).Take(SoCauDe);
             foreach (var item in listCauDe)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
                 deThi.CauHois.Add(item);
             }
-            var listCauTrungBinh = db.CauHois.Where(x => x.DoKhoID == 2).OrderBy(x => Guid.NewGuid()).Take(SoCauTrungBinh);
+            var listCauTrungBinh = db.CauHois.Where(x => x.DoKhoID == 2 && x.MonHocID == deThi.MonHocID).OrderBy(x => Guid.NewGuid()).Take(SoCauTrungBinh);
             foreach (var item in listCauTrungBinh)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
                 deThi.CauHois.Add(item);
             }
-            var listCauKho = db.CauHois.Where(x => x.DoKhoID == 3).OrderBy(x => Guid.NewGuid()).Take(SoCauKho);
+            var listCauKho = db.CauHois.Where(x => x.DoKhoID == 3 && x.MonHocID == deThi.MonHocID).OrderBy(x => Guid.NewGuid()).Take(SoCauKho);
             foreach (var item in listCauKho)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
                 deThi.CauHois.Add(item);
             }
-            var listCauRatKho = db.CauHois.Where(x => x.DoKhoID == 4).OrderBy(x => Guid.NewGuid()).Take(SoCauRatKho);
+            var listCauRatKho = db.CauHois.Where(x => x.DoKhoID == 4 && x.MonHocID == deThi.MonHocID).OrderBy(x => Guid.NewGuid()).Take(SoCauRatKho);
             foreach (var item in listCauRatKho)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi

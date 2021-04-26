@@ -51,8 +51,8 @@
                     <div class="col-md-10">
                         @Html.DropDownList("LoaiDe", new List<SelectListItem> {
                             new SelectListItem{ Text="Luyện Tập",Value="revision"},
-                            new SelectListItem{ Text="Thi Thử",Value="test"},
-                            new SelectListItem{ Text="Thi Thật",Value="final test"} },
+                            //new SelectListItem{ Text="Thi Thử",Value="test"},
+                            new SelectListItem{ Text="Thi",Value="final test"} },
                             htmlAttributes: new { @class = "form-control", @onchange = "CheckLoaiDe()" }
                         )
                     </div>

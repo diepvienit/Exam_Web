@@ -80,7 +80,19 @@
                 </div>
                 <div class="mr-3 p-1">
                     <i class="far fa-file-alt" aria-hidden="true"></i>
-                    <span>@item.LoaiDe</span>
+                    @{
+                        if (item.LoaiDe == "revision")
+                        {
+
+
+                            <span>Luyện tập</span>
+                        }
+                        else if(item.LoaiDe == "final test")
+                        {
+                            <span>Thi</span>
+
+                        }
+                    }
                 </div>
                 <div class="mr-3 p-1">
                     <i class="far fa-file-alt" aria-hidden="true"></i>

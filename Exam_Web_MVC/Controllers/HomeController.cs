@@ -14,10 +14,10 @@ namespace Exam_Web_MVC.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            if (!CheckLogin())
-            {
-                return Redirect("/Home/Login");
-            }
+            //if (!CheckLogin())
+            //{
+            //    return Redirect("/Home/Login");
+            //}
             return View(db.DeThis.OrderByDescending(x => x.DeThiID).Where(x=>x.Status == 2).ToList());
         }
 

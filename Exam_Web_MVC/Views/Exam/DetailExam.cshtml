@@ -35,7 +35,21 @@
             </tr>
             <tr>
                 <td>Loại đề</td>
-                <td>@ViewBag.DeThi.LoaiDe</td>
+                @{
+                    if (ViewBag.DeThi.LoaiDe == "revision")
+                    {
+
+
+                        <td>Luyện tập</td>
+                    }
+                    else if (ViewBag.DeThi.LoaiDe == "final test")
+                    {
+                        <td>Thi</td>
+
+                    }
+                }
+                @*<td>@ViewBag.DeThi.LoaiDe</td>*@
+
             </tr>
             <tr>
                 <td>Người ra đề</td>

@@ -32,6 +32,7 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
                               GioiTinh = ad.GioiTinh,
                               Email = ad.Email,
                               HocVi = ad.HocVi.TenHocVi,
+                              MonHoc = ad.MonHoc.TenMH,
                               UserName = ad.TaiKhoan.UserName
                           }).OrderByDescending(x => x.GiaoVienID).ToPagedList(page ?? 1, 15);
 
