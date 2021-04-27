@@ -51,11 +51,23 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(HocSinh_TaiKhoan_Model model)
+        public ActionResult Create(HocSinh_TaiKhoan_Model model, string strNgaySinh)
         {
+            if (!string.IsNullOrEmpty(strNgaySinh))
+            {
+                var myDate = DateTime.ParseExact(strNgaySinh, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                model.NgaySinh = myDate;
+            }
+            else
+            {
+                model.NgaySinh = null;
+            }
+
+            ModelState.Clear();
+            TryValidateModel(model);
+
             if (ModelState.IsValid)
             {
-
                 var hocSinh = new HocSinh
                 {
                     TenHS = model.TenHS,
@@ -109,11 +121,24 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(HocSinh_TaiKhoan_Model model)
+        public ActionResult Edit(HocSinh_TaiKhoan_Model model, string strNgaySinh)
         {
+            if (!string.IsNullOrEmpty(strNgaySinh))
+            {
+                var myDate = DateTime.ParseExact(strNgaySinh, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                model.NgaySinh = myDate;
+            }
+            else
+            {
+                model.NgaySinh = null;
+            }
+
+            ModelState.Clear();
+            TryValidateModel(model);
+
             if (ModelState.IsValid)
             {
-                if(model.TaiKhoanID != null && !string.IsNullOrEmpty(model.Password))
+                if (model.TaiKhoanID != null && !string.IsNullOrEmpty(model.Password))
                 {
                     var taikhoan = db.TaiKhoans.Find(model.TaiKhoanID);
                     taikhoan.Password = model.Password;

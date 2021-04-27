@@ -33,7 +33,20 @@
                             <td>@rowCount</td>
                             <td>@Model[i].MonHoc</td>
                             <td>@Model[i].TenDeThi</td>
-                            <td>@Model[i].LoaiDe</td>
+                            @*<td>@Model[i].LoaiDe</td>*@
+                            @*@Html.DisplayFor(modelItem => item.LoaiDe)*@
+                            @if (Model[i].LoaiDe == "revision")
+                            {
+                                <td>Luyện tập</td>
+                            }
+                            else if (Model[i].LoaiDe == "final test")
+                            {
+                                <td>Thi</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
                             <td>@Model[i].LanThi</td>
                             <td>@Model[i].ThoiGianLamBai</td>
                             <td>@Model[i].ThoiGianNopBai</td>

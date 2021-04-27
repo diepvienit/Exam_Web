@@ -31,7 +31,9 @@
                 <tr>
                     <td>@stt</td>
                     <td>@Html.DisplayFor(modelItem => item.TenHS)</td>
-                    <td>@Html.DisplayFor(modelItem => item.NgaySinh)</td>
+                    <td>
+                        @string.Format("{0:dd/MM/yyyy}", item.NgaySinh)
+                    </td>
                     <td>
                         @if (item.GioiTinh == true)
                         {

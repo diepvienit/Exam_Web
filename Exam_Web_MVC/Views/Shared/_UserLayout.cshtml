@@ -71,25 +71,11 @@
                                 </a>
                             }
                         }
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <a class="nav-link active" href="/" >
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Môn Thi
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse in" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=1})"><i class="fas fa-quote-left"></i>&nbspToán học</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=2})"><i class="fas fa-quote-left"></i>&nbspVật lý</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=3})"><i class="fas fa-quote-left"></i>&nbspHóa học</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=4})"><i class="fas fa-quote-left"></i>&nbspNgữ văn</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=5})"><i class="fas fa-quote-left"></i>&nbspTiếng anh</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=6})"><i class="fas fa-quote-left"></i>&nbspSinh học</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=7})"><i class="fas fa-quote-left"></i>&nbspLịch sử</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=8})"><i class="fas fa-quote-left"></i>&nbspĐịa lý</a>
-                                <a class="nav-link" href="@Url.Action("ListExam","Home",new { id=9})"><i class="fas fa-quote-left"></i>&nbspGDCD</a>
-                                @*<a class="nav-link" href="@Url.Action()"></a>*@
-                            </nav>
-                        </div>
+                        
                         @{
                             if (Session["TaiKhoanID_session"] != null)
                             {
