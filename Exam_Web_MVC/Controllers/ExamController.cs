@@ -55,6 +55,7 @@ namespace Exam_Web_MVC.Controllers
                 {
                     CauHoiID = cauHois[i].CauHoiID,
                     NoiDungCauHoi = cauHois[i].NoiDungCauHoi,
+                    Image = cauHois[i].Image,
                     Answer_A = cauHois[i].Answer_A,
                     Answer_B = cauHois[i].Answer_B,
                     Answer_C = cauHois[i].Answer_C,

@@ -114,41 +114,47 @@
                                 <p class="py-0">
                                     <b> Câu số @(i+1):</b>
                                     <i>(Độ khó: <span class='text-info'><b>@Model.Questions[i].DoKho</b></span>)</i> <br />
-                                <p><strong>@Model.Questions[i].NoiDungCauHoi</strong></p>
+                                    @if (!string.IsNullOrEmpty(Model.Questions[i].Image))
+                                    {
+                                        <p>
+                                            <img src="@Model.Questions[i].Image" alt="" title="" width="100" />
+                                        </p>
+                                    }
+                                    <p><strong>@Model.Questions[i].NoiDungCauHoi</strong></p>
+                                </div>
                             </div>
-                        </div>
-                        @*<input type="hidden" name="_causo" id="_causo" value="1">
-                            <input type="hidden" name="_causo_id" id="_causo_id" value="3692">
-                            <input type="hidden" name="_currentpage" value="1">
-                            <input type="hidden" name="_totalpages" value="10">*@
+                            @*<input type="hidden" name="_causo" id="_causo" value="1">
+                                <input type="hidden" name="_causo_id" id="_causo_id" value="3692">
+                                <input type="hidden" name="_currentpage" value="1">
+                                <input type="hidden" name="_totalpages" value="10">*@
 
-                        <div class="box-body p-1">
+                            <div class="box-body p-1">
 
-                            <div class="col-12 p-1  pull-left">
+                                <div class="col-12 p-1  pull-left">
 
-                                <div class="col-12 p-1 d-flex" style="padding:5px">
-                                    @*<input class="m-2" type="radio" id="Cau1A" name="Question@(i)" value="A" required />*@
-                                    @*@Html.RadioButtonFor(model => model.Questions[i].Answer_A, Model)*@
-                                    @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "A", new { @class = "m-2" })
-                                    <label for="Cau1A" style="font-weight: normal !important; "> <b>&nbsp;A:&nbsp;</b> @Model.Questions[i].Answer_A</label>
-                                </div>
-                                <div class="col-12 p-1 d-flex" style="padding:5px">
-                                    @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "B", new { @class = "m-2" })
-                                    <label for="Cau1B" style="font-weight: normal !important; "> <b>&nbsp;B:&nbsp;</b> @Model.Questions[i].Answer_B</label>
-                                </div>
-                                <div class="col-12 p-1 d-flex" style="padding:5px">
-                                    @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "C", new { @class = "m-2" })
-                                    <label for="Cau1C" style="font-weight: normal !important; "> <b>&nbsp;C:&nbsp;</b> @Model.Questions[i].Answer_C</label>
-                                </div>
-                                <div class="col-12 p-1 d-flex" style="padding:5px">
-                                    @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "D", new { @class = "m-2" })
-                                    <label for="Cau1D" style="font-weight: normal !important; "> <b>&nbsp;D:&nbsp;</b> @Model.Questions[i].Answer_D</label>
+                                    <div class="col-12 p-1 d-flex" style="padding:5px">
+                                        @*<input class="m-2" type="radio" id="Cau1A" name="Question@(i)" value="A" required />*@
+                                        @*@Html.RadioButtonFor(model => model.Questions[i].Answer_A, Model)*@
+                                        @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "A", new { @class = "m-2" })
+                                        <label for="Cau1A" style="font-weight: normal !important; "> <b>&nbsp;A:&nbsp;</b> @Model.Questions[i].Answer_A</label>
+                                    </div>
+                                    <div class="col-12 p-1 d-flex" style="padding:5px">
+                                        @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "B", new { @class = "m-2" })
+                                        <label for="Cau1B" style="font-weight: normal !important; "> <b>&nbsp;B:&nbsp;</b> @Model.Questions[i].Answer_B</label>
+                                    </div>
+                                    <div class="col-12 p-1 d-flex" style="padding:5px">
+                                        @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "C", new { @class = "m-2" })
+                                        <label for="Cau1C" style="font-weight: normal !important; "> <b>&nbsp;C:&nbsp;</b> @Model.Questions[i].Answer_C</label>
+                                    </div>
+                                    <div class="col-12 p-1 d-flex" style="padding:5px">
+                                        @Html.RadioButtonFor(m => m.Questions[i].SelectedAnswer, "D", new { @class = "m-2" })
+                                        <label for="Cau1D" style="font-weight: normal !important; "> <b>&nbsp;D:&nbsp;</b> @Model.Questions[i].Answer_D</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
             <button class="btn btn-primary" type="submit" id="submit_btn">Nộp bài</button>
         </form>
 

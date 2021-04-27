@@ -18,6 +18,9 @@ namespace Exam_Web_MVC.Controllers
             //{
             //    return Redirect("/Home/Login");
             //}
+
+            ViewBag.monhoc = db.MonHocs.ToList();
+
             return View(db.DeThis.OrderByDescending(x => x.DeThiID).Where(x=>x.Status == 2).ToList());
         }
 

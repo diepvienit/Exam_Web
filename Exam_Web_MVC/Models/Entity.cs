@@ -156,6 +156,7 @@ namespace Exam_Web_MVC.Models
     {
         public int CauHoiID { get; set; }
         public string NoiDungCauHoi { get; set; }
+        public string Image { get; set; }
         public string Answer_A { get; set; }
         public string Answer_B { get; set; }
         public string Answer_C { get; set; }

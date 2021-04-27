@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Thi online";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
+    string strin = "in";
 }
 
 <style type="text/css">
@@ -51,6 +52,7 @@
     .lam-bai svg {
         margin-right: 5px;
     }
+
     .panel-body {
         padding: 0 15px;
     }
@@ -62,425 +64,60 @@
             <div class="h3 text-primary pl-2 mt-2">Các đề thi mới nhất</div>
         </div>
         <div class="panel-group" id="monContent">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#montoanBody">
-                            Môn Toán
-                        </a>
-                    </h4>
-                </div>
-                <div id="montoanBody" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 1))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
+            @foreach (var mon in ViewBag.monhoc)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#monContent" href="#monhoc_@mon.MonHocID">
+                                @mon.TenMH
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="monhoc_@mon.MonHocID" class="panel-collapse collapse @strin">
+                        <div class="panel-body">
+                            @foreach (var item in Model.Where(x => x.MonHocID == mon.MonHocID))
+                            {
+                                <div class="bai-thi-item">
+                                    <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
+                                    <div class="d-flex mt-3">
+                                        <div class="mr-3 p-1">
+                                            <i class="fa fa-book" aria-hidden="true"></i>
+                                            <span>@item.CauHois.Count Câu Hỏi </span>
+                                        </div>
+                                        <div class="mr-3 p-1">
+                                            <i class="far fa-clock" aria-hidden="true"></i>
+                                            <span>@item.ThoiGianLamBai Phút</span>
+                                        </div>
+                                        <div class="mr-3 p-1">
+                                            <i class="far fa-file-alt" aria-hidden="true"></i>
+                                            @{
+                                                if (item.LoaiDe == "revision")
+                                                {
 
 
-                                                <span>Luyện tập</span>
+                                                    <span>Luyện tập</span>
+                                                }
+                                                else if (item.LoaiDe == "final test")
+                                                {
+                                                    <span>Thi</span>
+
+                                                }
                                             }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
+                                        </div>
+                                        <div class="mr-3 p-1">
+                                            <i class="far fa-file-alt" aria-hidden="true"></i>
+                                            <span>@item.ThoiGianBatDauLamBai</span>
+                                        </div>
                                     </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianBatDauLamBai</span>
-                                    </div>
+                                    <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
                                 </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#monlyBody">
-                            Môn lý
-                        </a>
-                    </h4>
-                </div>
-                <div id="monlyBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 2))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-
-
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#monhoaBody">
-                            Môn hóa
-                        </a>
-                    </h4>
-                </div>
-                <div id="monhoaBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 3))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-
-
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#monvanBody">
-                            Môn văn
-                        </a>
-                    </h4>
-                </div>
-                <div id="monvanBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 4))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-
-
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#monanhBody">
-                            Môn anh
-                        </a>
-                    </h4>
-                </div>
-                <div id="monanhBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 5))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-
-
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#monsinhBody">
-                            Môn sinh
-                        </a>
-                    </h4>
-                </div>
-                <div id="monsinhBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 6))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-
-
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#monsuBody">
-                            Môn lịch sử
-                        </a>
-                    </h4>
-                </div>
-                <div id="monsuBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 7))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-
-
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#mondiaBody">
-                            Môn địa lý
-                        </a>
-                    </h4>
-                </div>
-                <div id="mondiaBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 8))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#monContent" href="#mongdcdBody">
-                            Môn giáo dục công dân
-                        </a>
-                    </h4>
-                </div>
-                <div id="mongdcdBody" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        @foreach (var item in Model.Where(x => x.MonHocID == 9))
-                        {
-                            <div class="bai-thi-item">
-                                <a class="exam-title-home" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"> @item.TenDeThi </a>
-                                <div class="d-flex mt-3">
-                                    <div class="mr-3 p-1">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <span>@item.CauHois.Count Câu Hỏi </span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-clock" aria-hidden="true"></i>
-                                        <span>@item.ThoiGianLamBai Phút</span>
-                                    </div>
-                                    <div class="mr-3 p-1">
-                                        <i class="far fa-file-alt" aria-hidden="true"></i>
-                                        @{
-                                            if (item.LoaiDe == "revision")
-                                            {
-
-
-                                                <span>Luyện tập</span>
-                                            }
-                                            else if (item.LoaiDe == "final test")
-                                            {
-                                                <span>Thi</span>
-
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                <a class="lam-bai" href="@Url.Action("DetailExam","Exam",new { id=item.DeThiID})"><i class="fas fa-book-reader"></i> Làm bài </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
+                strin = "";
+            }
         </div>
     </div>
 </div>
