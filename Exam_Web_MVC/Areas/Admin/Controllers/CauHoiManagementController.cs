@@ -44,7 +44,7 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
                               MonHoc = ad.MonHoc.TenMH,
                               Image = ad.Image
                           }).OrderByDescending(x => x.CauHoiID).ToPagedList(page ?? 1, 10);
-
+            ViewBag.stt = (models.PageNumber - 1) * 15 + 1;
             return View(models);
         }
 
