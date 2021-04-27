@@ -43,11 +43,11 @@
             </div>
             <div class="form-group">
                 <div class="control-label col-md-2">Ngày sinh</div>
-                <div class="col-md-10">
-                    <div class='input-group date' id='strNgaySinh'>
+                <div class="col-md-2">
+                    <div class='input-group date form-date' id='strNgaySinh' style="flex-wrap: inherit;">
                         <input type="text" class="form-control" name="strNgaySinh" value="@string.Format("{0:dd/MM/yyyy}", Model.NgaySinh)" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-time"></span>
+                        <span class="input-group-addon" style="line-height: 20px;">
+                            <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
                 </div>
@@ -85,12 +85,3 @@
         }
     </div>
 </div>
-
-<script type="text/javascript">
-    $(function () {
-        $('#strNgaySinh').datetimepicker({
-            format: 'DD/MM/YYYY'
-        });
-    });
-</script>
-

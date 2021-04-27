@@ -54,25 +54,38 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(GiaoVien_TaiKhoan_Model viewModel)
+        public ActionResult Create(GiaoVien_TaiKhoan_Model model, string strNgaySinh)
         {
+            if (!string.IsNullOrEmpty(strNgaySinh))
+            {
+                var myDate = DateTime.ParseExact(strNgaySinh, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                model.NgaySinh = myDate;
+            }
+            else
+            {
+                model.NgaySinh = null;
+            }
+
+            ModelState.Clear();
+            TryValidateModel(model);
+
             if (ModelState.IsValid)
             {
                 var taiKhoan = new TaiKhoan
                 {
-                    UserName = viewModel.UserName,
-                    Password = viewModel.Password,
+                    UserName = model.UserName,
+                    Password = model.Password,
                     Role = "teacher"
                 };
 
                 var giaoVien = new GiaoVien
                 {
-                    TenGV = viewModel.TenGV,
-                    NgaySinh = viewModel.NgaySinh,
-                    GioiTinh = viewModel.GioiTinh,
-                    Email = viewModel.Email,
-                    MonHocID = viewModel.MonHocID,
-                    HocViID = viewModel.HocViID
+                    TenGV = model.TenGV,
+                    NgaySinh = model.NgaySinh,
+                    GioiTinh = model.GioiTinh,
+                    Email = model.Email,
+                    MonHocID = model.MonHocID,
+                    HocViID = model.HocViID
                 };
                 taiKhoan.GiaoViens.Add(giaoVien);
 
@@ -119,8 +132,21 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(GiaoVien_TaiKhoan_Model model)
+        public ActionResult Edit(GiaoVien_TaiKhoan_Model model, string strNgaySinh)
         {
+            if (!string.IsNullOrEmpty(strNgaySinh))
+            {
+                var myDate = DateTime.ParseExact(strNgaySinh, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                model.NgaySinh = myDate;
+            }
+            else
+            {
+                model.NgaySinh = null;
+            }
+
+            ModelState.Clear();
+            TryValidateModel(model);
+
             if (ModelState.IsValid)
             {
                 if (model.TaiKhoanID != null && !string.IsNullOrEmpty(model.Password))

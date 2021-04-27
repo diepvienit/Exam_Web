@@ -22,7 +22,7 @@ namespace Exam_Web_MVC
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/Plugins/bootstrap-3.1.1-dist/css/bootstrap.css",
                       "~/Content/site.css"));
         }
     }
