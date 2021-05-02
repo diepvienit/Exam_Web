@@ -30,7 +30,20 @@ namespace Exam_Web_MVC.Controllers
             {
                 return Redirect("/Home/Login");
             }
-            ViewBag.DeThi = db.DeThis.Find(id);
+            var dethi = db.DeThis.Find(id);
+            ViewBag.DeThi = dethi;
+
+            // Kiểm tra xem đã thi chưa
+            if(dethi.LoaiDe == "final test" && dethi.LanThis.Any())
+            {
+                return RedirectToAction("TestFalse");
+            }
+
+            return View();
+        }
+
+        public ActionResult TestFalse()
+        {
             return View();
         }
 

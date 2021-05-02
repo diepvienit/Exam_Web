@@ -420,6 +420,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\ListResult.cshtml" />
     <Content Include="Views\Exam\TimeFalse.cshtml" />
+    <Content Include="Views\Exam\TestFalse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
