@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Vẫn chưa đến thời gian làm bài";
+    Layout = "~/Areas/Teacher/Views/Shared/_TeacherLayout.cshtml";
+}
+
+
+@{
+    ViewBag.Title = "DetailExam";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+@{
+    if (Session["TaiKhoanID_session"] == null)
+    {
+        <div class="alert alert-warning">
+            Bạn phải đăng nhập mới có thể làm bài kiểm tra!
+        </div>
+    }
+}
+<div class="card">
+    <div class="card-header">
+        <h2>Vẫn chưa đến thời gian làm bài</h2>
+    </div>
+    <div class="card-body">
+        <h2>Thời gian bắt đầu làm bài thi <b>@ViewBag.tendethi</b> là <b>@string.Format("{0:dd/MM/yyy hh:mm}", ViewBag.thoigianbatdau)</b></h2>
+    </div>
+</div>
+
+
+

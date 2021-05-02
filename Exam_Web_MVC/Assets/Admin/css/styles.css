@@ -10276,9 +10276,10 @@ body {
 .sb-sidenav .sb-sidenav-menu .nav .nav-link {
     display: flex;
     align-items: center;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
     position: relative;
+    border-bottom: 1px solid #4c4949;
 }
 
 .sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
@@ -10345,7 +10346,7 @@ body {
 }
 
 .sb-sidenav-dark .sb-sidenav-footer {
-    background-color: #343a40;
+    background-color: #4e5965;
 }
 
 .sb-sidenav-light {

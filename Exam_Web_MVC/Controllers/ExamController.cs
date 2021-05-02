@@ -16,6 +16,14 @@ namespace Exam_Web_MVC.Controllers
             return View();
         }
 
+        public ActionResult TimeFalse(int id)
+        {
+            var dethi = db.DeThis.Find(id);
+            ViewBag.tendethi = dethi.TenDeThi;
+            ViewBag.thoigianbatdau = dethi.ThoiGianBatDauLamBai;
+            return View();
+        }
+
         public ActionResult DetailExam(int id)
         {
             if (!CheckLogin())
@@ -28,17 +36,22 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult DoExam(int id)
         {
+            var taikhoanid = (int)Session["TaiKhoanID_session"];
             if (!CheckLogin())
             {
                 return Redirect("/Home/Login");
             }
+            var hocsinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == taikhoanid);
+
             var dethi = db.DeThis.Find(id);
-            var taikhoanid = (int)Session["TaiKhoanID_session"];
+
+            if (dethi.ThoiGianBatDauLamBai > DateTime.Now)
+            {
+                return RedirectToAction("TimeFalse", new { id });
+            }
 
             ViewBag.DeThi = dethi;
             ViewBag.SoCauHoi = dethi.CauHois.Count();
-
-            var hocsinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == taikhoanid);
 
             int hocSinhID = hocsinh.HocSinhID;
             ViewBag.TenHS = hocsinh.TenHS;
@@ -151,7 +164,7 @@ namespace Exam_Web_MVC.Controllers
 
 
             db.Entry(lanThi).State = EntityState.Modified;
-            db.SaveChanges(); 
+            db.SaveChanges();
 
             return View();
         }

@@ -419,6 +419,7 @@
     <Content Include="Views\Home\ChangePassword.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\ListResult.cshtml" />
+    <Content Include="Views\Exam\TimeFalse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
