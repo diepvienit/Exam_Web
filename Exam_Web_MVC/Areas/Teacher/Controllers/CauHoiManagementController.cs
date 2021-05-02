@@ -22,12 +22,21 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
 
         public ActionResult Index(int? page, string keysearch = "")
         {
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
+
+            if (userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+            var monhocid = userInfo.MonHocID;
+
             ViewBag.keysearch = keysearch;
 
             var models = (from ad in db.CauHois
-                          where string.IsNullOrEmpty(keysearch)
-                            || ad.NoiDungCauHoi.Contains(keysearch)
-                            || ad.MonHoc.TenMH.Contains(keysearch)
+                          where ad.MonHocID == monhocid &&
+                            (string.IsNullOrEmpty(keysearch)
+                            || ad.NoiDungCauHoi.Contains(keysearch))
                           select new CauHoiEntity()
                           {
                               CauHoiID = ad.CauHoiID,
@@ -49,17 +58,17 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
             return View(models);
         }
 
-        [HttpPost]
-        //[HttpGet]
-        public ActionResult Index(string searchString)
-        {
-            return RedirectToAction("Search", new { searchString });
-        }
-
         public ActionResult Create()
         {
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
 
-            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH");
+            if (userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+            ViewBag.tenmonhoc = userInfo.MonHoc.TenMH;
+
             ViewBag.DoKhoID = new SelectList(db.DoKhoes, "DoKhoID", "TenDoKho");
             return View();
         }
@@ -71,6 +80,18 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CauHoi cauHoi, HttpPostedFileBase urlImage)
         {
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
+
+            if (userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+            cauHoi.MonHocID = userInfo.MonHocID;
+
+            ModelState.Clear();
+            TryValidateModel(cauHoi);
+
             if (ModelState.IsValid)
             {
                 if (urlImage.ContentLength > 0)
@@ -95,8 +116,16 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // GET: Admin/CauHoiManagement/Edit/5
         public ActionResult Edit(int id)
         {
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
+
+            if (userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+            ViewBag.tenmonhoc = userInfo.MonHoc.TenMH;
+
             CauHoi cauHoi = db.CauHois.Find(id);
-            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", cauHoi.MonHocID);
             ViewBag.DoKhoID = new SelectList(db.DoKhoes, "DoKhoID", "TenDoKho", cauHoi.DoKhoID);
             return View(cauHoi);
         }

@@ -17,12 +17,20 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // GET: Admin/DeThiManagement
         public ActionResult Index(int? page, string keysearch = "")
         {
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
+
+            if (userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+            var monhocid = userInfo.MonHocID;
+
             ViewBag.keysearch = keysearch;
 
             var models = (from ad in db.DeThis
-                          where string.IsNullOrEmpty(keysearch)
-                            || ad.TenDeThi.Contains(keysearch)
-                            || ad.MonHoc.TenMH.Contains(keysearch)
+                          where ad.MonHocID == monhocid && (string.IsNullOrEmpty(keysearch)
+                            || ad.TenDeThi.Contains(keysearch))
                           select new DeThiEntity()
                           {
                               DeThiID = ad.DeThiID,
@@ -53,7 +61,17 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // GET: Admin/DeThiManagement/Create
         public ActionResult Create()
         {
-            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH");
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
+
+            if (userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+
+            var monhoc = userInfo.MonHoc;
+            ViewBag.tenmonhoc = monhoc.TenMH;
             return View();
         }
 
@@ -67,7 +85,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
             strStartDate += ":00";
             var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
 
-            if(userId == 0)
+            if (userId == 0)
             {
                 return Redirect("/Home/Login");
             }
@@ -77,7 +95,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
             {
                 return Redirect("/Home/Login");
             }
-
+            model.MonHocID = userInfo.MonHocID;
             model.GiaoVienID = userInfo.GiaoVienID;
 
             model.ThoiGianBatDauLamBai = DateTime.ParseExact(strStartDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
@@ -98,10 +116,21 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         // GET: Admin/DeThiManagement/Edit/5
         public ActionResult Edit(int id)
         {
+            var userId = Convert.ToInt32(Session["TaiKhoanID_session"]);
+
+            if (userId == 0)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            var userInfo = db.GiaoViens.FirstOrDefault(x => x.TaiKhoanID == userId);
+
+            var monhoc = userInfo.MonHoc;
+            ViewBag.tenmonhoc = monhoc.TenMH;
+
             var model = db.DeThis.Find(id);
 
             ViewBag.strStartDate = string.Format("{0:dd/MM/yyyy HH:mm}", model.ThoiGianBatDauLamBai);
-            ViewBag.MonHocID = new SelectList(db.MonHocs, "MonHocID", "TenMH", model.MonHocID);
             return View(model);
         }
 
@@ -195,7 +224,7 @@ namespace Exam_Web_MVC.Areas.Teacher.Controllers
         public ActionResult AddQuestionAuto(int dethiid, int SoCauDe, int SoCauTrungBinh, int SoCauKho, int SoCauRatKho)
         {
             DeThi deThi = db.DeThis.Find(dethiid);
-            var listCauDe = db.CauHois.Where(x => x.DoKhoID == 1 && x.MonHocID==deThi.MonHocID).OrderBy(x => Guid.NewGuid()).Take(SoCauDe);
+            var listCauDe = db.CauHois.Where(x => x.DoKhoID == 1 && x.MonHocID == deThi.MonHocID).OrderBy(x => Guid.NewGuid()).Take(SoCauDe);
             foreach (var item in listCauDe)
             {
                 //o day nhung cau hoi nao trung se khong duoc add nen khong can phai loc cau hoi da co trong de thi
