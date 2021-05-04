@@ -8,13 +8,13 @@
 
 <div class="card">
     <div class="card-header">
-        <h2>Danh Sách Đề Thi</h2>
+        <h2>Liên Hệ</h2>
     </div>
     <div class="box-action">
         @using (Html.BeginForm("Index", "Contact", FormMethod.Get, new { @class = "form-inline margin-bottom", @role = "form" }))
         {
             <div class="form-group">
-                @Html.TextBox("keysearch", null, new { @class = "form-control", @placeholder = "Tìm tên..." })
+                @Html.TextBox("keysearch", null, new { @class = "form-control", @placeholder = "Tìm kiếm liên hệ..." })
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>

@@ -3670,6 +3670,9 @@ pre code {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
+    text-transform: capitalize;
+    color: #0c2e60;
+    font-family: "Poppins", sans-serif;
 }
 
 .nav-link {

@@ -82,7 +82,19 @@
                 </div>
                 <div class="mr-3 p-1">
                     <i class="far fa-file-alt" aria-hidden="true"></i>
-                    <span>@ViewBag.DeThi.LoaiDe</span>
+                    @{
+                        if (ViewBag.DeThi.LoaiDe == "revision")
+                        {
+
+
+                            <span>Luyện tập</span>
+                        }
+                        else if (ViewBag.DeThi.LoaiDe == "final test")
+                        {
+                            <span>Thi</span>
+
+                        }
+                    }
                 </div>
             </div>
             <div class="col-md-4 text-right">
