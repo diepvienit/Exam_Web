@@ -1,7 +1,7 @@
 ﻿@model Exam_Web_MVC.Models.DoExam_Model
 @{
-    ViewBag.Title = "DoExam";
-    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewBag.Title = "Làm bài thi";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 @*<script src="~/Assets/User/scripts/timer_count_down.js"></script>*@
 <script>
@@ -63,7 +63,11 @@
     window.onload = timer_count_down(@ViewBag.DeThi.ThoiGianLamBai);
     //window.onload = timer_count_down(1);
 </script>
-<div class="card">
+<div name="clock" class="clock text-right btn btn-sm btn-secondary font-weight-bold fixed-top pr-5">
+    <span>Thời gian còn lại:&nbsp</span>
+    <span class="hours">00:</span><span class="minutes">00:</span><span class="seconds">00</span>
+</div>
+<div class="card" style="margin-top: 40px;">
     <div class="card-header">
         <div class="col-12 p-1 pb-2 text-center">
             <h4 class="text-primary">@ViewBag.DeThi.TenDeThi</h4>
@@ -99,15 +103,8 @@
             </div>
             <div class="col-md-4 text-right">
                 <div name="clock" class="clock text-right btn btn-sm btn-secondary font-weight-bold">
-                    @*00:15:00*@
                     <span class="hours">00:</span><span class="minutes">00:</span><span class="seconds">00</span>
                 </div>
-            </div>
-            @*sticky top timer*@
-            <div name="clock" class="clock text-right btn btn-sm btn-secondary font-weight-bold fixed-top pr-5">
-                @*00:15:00*@
-                <span>Thời gian còn lại:&nbsp</span>
-                <span class="hours">00:</span><span class="minutes">00:</span><span class="seconds">00</span>
             </div>
         </div>
     </div>
@@ -128,10 +125,10 @@
                                     <i>(Độ khó: <span class='text-info'><b>@Model.Questions[i].DoKho</b></span>)</i> <br />
                                     @if (!string.IsNullOrEmpty(Model.Questions[i].Image))
                                     {
-                                        <p>
-                                            <img src="@Model.Questions[i].Image" alt="" title="" width="100" />
-                                        </p>
-                                    }
+                                    <p>
+                                        <img src="@Model.Questions[i].Image" alt="" title="" style="max-width: 400px; width: 100%;" />
+                                    </p>
+                                }
                                     <p><strong>@Model.Questions[i].NoiDungCauHoi</strong></p>
                                 </div>
                             </div>

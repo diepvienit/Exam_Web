@@ -49,11 +49,12 @@ namespace Exam_Web_MVC.Controllers
 
         public ActionResult DoExam(int id)
         {
-            var taikhoanid = (int)Session["TaiKhoanID_session"];
             if (!CheckLogin())
             {
                 return Redirect("/Home/Login");
             }
+
+            var taikhoanid = (int)Session["TaiKhoanID_session"];
             var hocsinh = db.HocSinhs.FirstOrDefault(x => x.TaiKhoanID == taikhoanid);
 
             var dethi = db.DeThis.Find(id);
