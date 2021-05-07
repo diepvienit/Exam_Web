@@ -90,6 +90,8 @@
                             @Html.ActionLink("Hoc sinh", "Students", new { id = item.DeThiID })
                             <span>|</span>
                             @Html.ActionLink("Xem", "Details", new { id = item.DeThiID })
+                            <span>|</span>
+                            @Html.ActionLink("Xóa","Delete",new { id = item.DeThiID })
                         </div>
                     </td>
                 </tr>

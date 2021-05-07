@@ -157,5 +157,16 @@ namespace Exam_Web_MVC.Areas.Admin.Controllers
             }
             base.Dispose(disposing);
         }
+        public ActionResult Delete(int id)
+        {
+
+            var entity = db.DeThis.Find(id);
+
+            db.LanThis.RemoveRange(db.LanThis.Where(x=>x.DeThiID == id));
+            db.DeThis.Remove(entity);
+
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

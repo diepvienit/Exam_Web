@@ -1307,6 +1307,7 @@ pre code {
     .col-lg-7 {
         flex: 0 0 58.3333333333%;
         max-width: 58.3333333333%;
+        margin-top:50px;
     }
 
     .col-lg-8 {
@@ -9863,7 +9864,7 @@ button.bg-dark:focus {
 }
 
 .font-weight-normal {
-    font-weight: 400 !important;
+    font-weight: 550 !important;
 }
 
 .font-weight-bold {
